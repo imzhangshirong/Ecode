@@ -1,0 +1,286 @@
+*{
+	margin:0px auto;
+	padding: 0px auto;
+	font-family: "微软雅黑", "Lucida Grande", "Lucida Sans", Helvetica, Arial, Sans
+}
+.ecode{
+	font-size: 12px;
+	margin:0px auto;
+	padding: 0px auto;
+	float: left;
+	position: relative;
+	background-color: #FDFDFD;
+	margin: 10px;
+	overflow: hidden;
+	border: 1px solid #F1F2F4;
+}
+.ecode .show{
+	margin-top: 30px;
+	height: 100%;
+	float: left;
+	position: relative;
+	overflow:auto;
+	width: 100%;
+	padding: 1px;
+	padding-bottom: 10px;
+}
+.ecode table,.ecode p,.ecode ul,.ecode li,.ecode .function,.ecode .assembly{
+	position: relative;
+	float: left;
+	clear: left;
+	display: block;
+	list-style: none;
+}
+.ecode table td,.ecode table th{
+	text-align: left;
+	border-right: 1px solid;
+	border-bottom: 1px solid;
+	padding: 2px 3px;
+	border-color: #888888;
+
+}
+.ecode table td{
+	background-color: #fff;
+}
+.ecode table{
+	border-left: 1px solid;
+	border-top: 1px solid;
+	border-collapse: separate;
+	border-spacing: 0px;
+	border-color: #888888;
+	white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.ecode .show div{
+	clear: left;
+	float: left;
+	margin-left: 10px;
+	margin-bottom: 10px;
+}
+.ecode .show div:first-child{
+	margin-top: 10px;
+	margin-bottom: 0px;
+}
+.ecode .function_table{
+	margin-bottom: 4px;
+}
+.ecode .variable_table{
+	margin-bottom: 4px;
+}
+.ecode .assembly_table{
+	margin-bottom: 8px;
+}
+.ecode ul{
+	padding-left: 20px;
+	position: relative;
+	float: left;
+}
+.ecode ul li{
+	margin-left: 0px;
+	float: left;
+	position: relative;
+	display: block;
+}
+.ecode span{
+	position: relative;
+	float: left;
+	display: block;
+}
+.ecode p{
+	position: relative;
+	line-height: 20px;
+	float: left;
+	display: block;
+	clear: both;
+	white-space:nowrap; text-overflow:ellipsis;
+}
+.ecode .line1{
+	width: 15px;
+	border-style: dashed;
+	border-color: #808080;
+	border-left-width:1px;
+	border-top-width:1px;
+	border-right-width:0px;
+	border-bottom-width:1px;
+	left: 0px;
+	top:10px;
+	position: absolute;
+}
+.ecode .judgeChild{
+	position: relative;
+	overflow: visible;
+	float: left;
+}
+.ecode .judgeChild .line2{
+	border-left-width:0px;
+}
+.ecode .line2{
+	height: 100%;
+	width: 10px;
+	border-style: dashed;
+	border-color: #808080;
+	border-left-width:1px;
+	border-top-width:1px;
+	border-right-width:0px;
+	border-bottom-width:0px;
+	display: none;
+	top:10px;
+	left: 6px;
+	position: absolute;
+}
+.ecode .line3{
+	height: 100%;
+	width: 32px;
+	left: -1px;
+	border-style: dashed;
+	border-color: #808080;
+	border-left-width:0px;
+	border-top-width:0px;
+	border-right-width:0px;
+	border-bottom-width:1px;
+	display: none;
+	position: absolute;
+}
+.ecode .triangle-right {
+	width: 0;
+	height: 0;
+	border-top: 4px solid transparent;
+	border-left:6px solid #808080;
+	border-bottom: 4px solid transparent;
+	position: absolute;
+	right: -2px;
+	display: none;
+}
+.ecode .triangle-down {
+	width: 0;
+	height: 0;
+	border-top: 5px solid #808080;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	position: absolute;
+	bottom: -2px;
+	left: -4px;
+	display: none;
+}
+.ecode .close{
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+	float: left;
+}
+.ecode .def{
+	width: 0px;
+	height: 0px;
+	overflow: hidden;
+	float: left;
+
+}
+.ecode .assembly div{
+	margin-left: 0px;
+}
+.ecode .assembly_table tr:nth-child(2) td:first-child{
+	color:#000080;
+}
+.ecode .function_table tr:nth-child(2) td:first-child{
+	color:#000080;
+}
+.ecode .ifTrueClose{
+	overflow: hidden;
+	padding: 0px;
+	height: 0px;
+}
+
+.ecode .sysCommand{
+	color:#0000FF
+}
+.ecode .bracket0{
+	color:#000080;
+	padding: 0px 2px;
+}
+.ecode .bracket1{
+	color:#000080;
+	padding: 0px 2px;
+}
+.ecode .bracket2{
+	color:#000080;
+	padding: 0px 2px;
+}
+.ecode .operator{
+	color:#000080;
+	padding: 0px 2px;
+}
+.ecode .math{
+	color:#800000
+}
+.ecode .command{
+	color:#800000
+}
+.ecode .static{
+	color:#000080
+}
+.ecode .quote{
+	color:#008080
+}
+.ecode table th{
+	background-color: #E6EDE4;
+	font-weight: 400;
+}
+.ecode .dataType{
+	color: #0000FF;
+}
+.ecode .remark{
+	color: #008000
+}
+.ecode .origiData,.ecode .origiData textarea{
+	width: 100%;
+	height: 100%;
+
+}
+.ecode .origiData textarea{
+	padding: 0px;
+	margin: 0px;
+	width: 100%;
+	height: 100%;
+	border:none;
+	padding: 1px;
+	font-size: 12px;
+}
+.ecode .origiData{
+	left: 0px;
+	top:30px;
+	position: absolute;
+	display: none;
+	width: 100%;
+
+}
+.ecode .controller{
+	height:30px;
+	width: 100%;
+	background-color: #F1F2F4;
+	top:0px;
+	left: 0px;
+	position: absolute;
+
+}
+.ecode .controller .copy{
+	height:30px;
+	padding: 0px 5px;
+	color: #fff;
+	background-color: #45A3E1;
+	line-height: 30px;
+	font-size: 12px;
+	text-decoration: none;
+	position: absolute;
+	right: 0px;
+	top: 0px;
+}
+.ecode .controller .desc{
+	height:30px;
+	width: 100%;
+	top:0px;
+	left: 0px;
+	position: absolute;
+	font-size: 14px;
+	text-indent: 10px;
+	line-height: 30px;
+
+}
