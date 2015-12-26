@@ -1,0 +1,80 @@
+﻿<html>
+<head>
+<title>eCode 2.1测试 by zhangshirong</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="ecode.css" type="text/css"/>
+<script type="text/javascript" src="ecode.js"></script>
+<style>
+#codeshow{overflow:hidden;width:100%;float:left;clear:left;margin-top:20px;}
+
+</style>
+</head>
+<body>
+<script type="text/javascript">
+function run()
+{
+document.getElementById("codeshow_ecode_1").innerHTML=document.getElementById("code").value
+trans("codeshow");
+}
+window.onload=run;
+</script>
+<textarea id="code" style="height:200px;width:100%">
+.版本 2
+
+.子程序 GetProcessHandle, 整数型
+.参数 lpProcessName, 文本型
+.局部变量 hSnapShot, 整数型
+.局部变量 dwRet, 整数型
+.局部变量 prHandle, 整数型
+.局部变量 pe32, PROCESSENTRY32
+
+hSnapShot ＝ CreateToolhelp32Snapshot (#TH32CS_SNAPALL, 0)
+.如果真 (hSnapShot ＝ 0)
+    信息框 (“获得进程快照失败”, 0, )
+    返回 (dwRet)
+.如果真结束
+pe32.dwSize ＝ 1024
+prHandle ＝ Process32First (hSnapShot, pe32)
+.判断循环首 (prHandle ≠ 0)
+    .判断开始 (到文本 (pe32.szExeFile) ＝ lpProcessName)
+        dwRet ＝ pe32.th32ProcessID
+        跳出循环 ()
+    .默认
+        prHandle ＝ Process32Next (hSnapShot, pe32)
+    .判断结束
+
+.判断循环尾 ()
+CloseHandle (hSnapShot)
+返回 (dwRet)</textarea>
+<input type="button" value="画代码" onclick="javascript:run()"/>
+<div id="codeshow" >
+<div id="codeshow_ecode_1">
+.版本 2
+
+.子程序 GetProcessHandle, 整数型
+.参数 lpProcessName, 文本型
+.局部变量 hSnapShot, 整数型
+.局部变量 dwRet, 整数型
+.局部变量 prHandle, 整数型
+.局部变量 pe32, PROCESSENTRY32
+
+hSnapShot ＝ CreateToolhelp32Snapshot (#TH32CS_SNAPALL, 0)
+.如果真 (hSnapShot ＝ 0)
+    信息框 (“获得进程快照失败”, 0, )
+    返回 (dwRet)
+.如果真结束
+pe32.dwSize ＝ 1024
+prHandle ＝ Process32First (hSnapShot, pe32)
+.判断循环首 (prHandle ≠ 0)
+    .判断开始 (到文本 (pe32.szExeFile) ＝ lpProcessName)
+        dwRet ＝ pe32.th32ProcessID
+        跳出循环 ()
+    .默认
+        prHandle ＝ Process32Next (hSnapShot, pe32)
+    .判断结束
+
+.判断循环尾 ()
+CloseHandle (hSnapShot)
+返回 (dwRet)
+</div>
+</div></body></html>
