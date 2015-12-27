@@ -101,7 +101,7 @@
 	border-top-width:1px;
 	border-right-width:0px;
 	border-bottom-width:1px;
-	left: 0px;
+	left: 2px;
 	top:10px;
 	position: absolute;
 }
@@ -124,7 +124,7 @@
 	border-bottom-width:0px;
 	display: none;
 	top:10px;
-	left: 6px;
+	left: 8px;
 	position: absolute;
 }
 .ecode .line3{
@@ -144,7 +144,7 @@
 	width: 0;
 	height: 0;
 	border-top: 4px solid transparent;
-	border-left:6px solid #808080;
+	border-left:5px solid #808080;
 	border-bottom: 4px solid transparent;
 	position: absolute;
 	right: -2px;
@@ -174,6 +174,11 @@
 	float: left;
 
 }
+.ecode .ifTrueClose{
+	overflow: hidden;
+	padding: 0px;
+	height: 0px;
+}
 .ecode .assembly div{
 	margin-left: 0px;
 }
@@ -183,12 +188,6 @@
 .ecode .function_table tr:nth-child(2) td:first-child{
 	color:#000080;
 }
-.ecode .ifTrueClose{
-	overflow: hidden;
-	padding: 0px;
-	height: 0px;
-}
-
 .ecode .sysCommand{
 	color:#0000FF
 }
@@ -229,6 +228,14 @@
 }
 .ecode .remark{
 	color: #008000
+}
+.ecode .logic{
+	color:#000080;
+	margin-left: 8px;
+	margin-right: 8px;
+}
+.ecode .logicStatic{
+	color:#000080;
 }
 .ecode .origiData,.ecode .origiData textarea{
 	width: 100%;

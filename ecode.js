@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                            Ecode 3.4                      *//
+//*                            Ecode 3.5                      *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 var Ecode = {
@@ -35,10 +35,18 @@ var Ecode = {
 			{origi:".循环判断尾",replace:"<span class='sysCommand'>循环判断尾</span>"},
 		];
 		var sysCom=[
-			'返回',
-			'跳出循环',
-			'到循环尾',
-			'结束',
+			"返回",
+			"跳出循环",
+			"到循环尾",
+			"结束",
+		];
+		var sysCom2=[
+			"或",
+			"且"
+		];
+		var sysSta=[
+			"真",
+			"假"
 		]
 		ecode.trans=function(ele){ //ele如果为空则转换当前所有class为ecode的，ele为指定的即转换指定，同时ele可以为自定义的元素数组
 			var eleEcode;
@@ -189,7 +197,6 @@ var Ecode = {
 						var line1=parent.children[0];
 						var line2=parent.children[1];
 						var close=parent.children[parent.children.length-1];
-						//alert(def)
 						var add=turn0*4;
 						if(turn1){
 							line1.style.top=10+add+"px";
@@ -200,6 +207,8 @@ var Ecode = {
 						else{
 							line1.style.display="none";
 							line2.style.height=close.offsetTop-10-add+"px";
+							line2.style.left="2px";
+							line2.style.width="15px";
 							line2.style.top=10+add+"px";
 							line2.style.display="block";
 							line2.querySelector(".triangle-down").style.display="block";
@@ -761,6 +770,7 @@ var Ecode = {
 			var codeStr=origiCodeStr;
 			var str=codeStr;
 			var add=0;
+			//var addRemark=0;
 			var remark=codeStr.length;
 			if(type){
 				//高亮注释/////////////////////////////////
@@ -813,18 +823,23 @@ var Ecode = {
 						add+=rep.length-(quote[a][1]-quote[a][0])-1;
 					}
 				}
-				remark+=add-1;
+				remark+=add;
 				//高亮常量/////////////////////////////////
 				add=0;
 				quote=findMatchStr("“","”",codeStr);
 				var statics=codeStr.indexOf("#",0);
 				while(statics>-1){
 					var k=0;
-					for(var a=0;a<quote.length;a++){
-						if((quote[a][0]<statics && quote[a][1]>statics)||(statics>remark)){
-							k=1;
-							break;
+					if(statics<remark){
+						for(var a=0;a<quote.length;a++){
+							if((quote[a][0]<statics && quote[a][1]>statics)){
+								k=1;
+								break;
+							}
 						}
+					}
+					else{
+						k=1;
 					}
 					if(k==0){
 						var p=new Array();
@@ -863,36 +878,48 @@ var Ecode = {
 				}
 				add=0;
 				str=codeStr;
-
 			}
 			//高亮命令/////////////////////////////////
 			var quote=findMatchStr("“","”",codeStr);
 			var bracket0=findMatchStr("(",")",codeStr);
 			for(var a=0;a<bracket0.length;a++){
 				var k=0;
-				for(var b=0;b<quote.length;b++){
-					if((quote[b][0]<bracket0[a][0] && quote[b][1]>bracket0[a][1])||(bracket0[a][0]>remark)){
-						k=1;
-						break;
+				if(bracket0[a][0]<remark){
+					for(var b=0;b<quote.length;b++){
+						if((quote[b][0]<bracket0[a][0] && quote[b][1]>bracket0[a][1])){
+							k=1;
+							break;
+						}
 					}
+				}
+				else{
+					k=1;
 				}
 				if(k==0){
 					var son=codeStr.substr(bracket0[a][0]+1,bracket0[a][1]-bracket0[a][0]-1);
 					son=parseCodeLine(son);
+					var lastStart=bracket0[a][0]-1;
+					for(var b=lastStart;b>-1;b--){
+						if(codeStr.substr(b,1)!=" "){
+							lastStart=b;
+							break;
+						}
+					}
 					var p=new Array();
-					p[p.length]=codeStr.lastIndexOf("+",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("-",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("*",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("/",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("%",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("=",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("\\",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf(">",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("<",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf(".",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf(",",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("＝",bracket0[a][0]-1);
-					p[p.length]=codeStr.lastIndexOf("≠",bracket0[a][0]-1);
+					p[p.length]=codeStr.lastIndexOf("+",lastStart);
+					p[p.length]=codeStr.lastIndexOf("-",lastStart);
+					p[p.length]=codeStr.lastIndexOf("*",lastStart);
+					p[p.length]=codeStr.lastIndexOf("/",lastStart);
+					p[p.length]=codeStr.lastIndexOf("%",lastStart);
+					p[p.length]=codeStr.lastIndexOf("=",lastStart);
+					p[p.length]=codeStr.lastIndexOf("\\",lastStart);
+					p[p.length]=codeStr.lastIndexOf(">",lastStart);
+					p[p.length]=codeStr.lastIndexOf("<",lastStart);
+					p[p.length]=codeStr.lastIndexOf(".",lastStart);
+					p[p.length]=codeStr.lastIndexOf(",",lastStart);
+					p[p.length]=codeStr.lastIndexOf("＝",lastStart);
+					p[p.length]=codeStr.lastIndexOf("≠",lastStart);
+					p[p.length]=codeStr.lastIndexOf(" ",lastStart);
 					var p1=-1;
 					for(var b=0;b< p.length;b++){
 						if(p[b]!=-1 && p[b]>p1){
@@ -962,7 +989,30 @@ var Ecode = {
 				if(p_<p && p_>-1){
 					rep=trim(codeStr.substr(0,p_));
 					if(rep!=""){
-						rep="<span class='var'>"+rep+"</span>";
+						var temp=rep.split(" ");
+						var rep_="";
+						for(var c=0;c<temp.length;c++){
+							var temp_=temp[c];
+							var sp=temp[c].indexOf("<");
+							if(sp>-1){
+								temp_=temp[c].substr(0,sp);
+							}
+							for(var d=0;d<sysSta.length;d++){
+								if(temp_==sysSta[d]){
+									temp_="<span class='logicStatic'>"+temp_+"</span>";
+								}
+							}
+							for(var d=0;d<sysCom2.length;d++){
+								if(temp_==sysCom2[d]){
+									temp_="<span class='logic'>"+temp_+"</span>";
+								}
+							}
+							rep_+=" "+temp_;
+						}
+						if(temp.length==0){
+							rep_=rep;
+						}
+						rep="<span class='var'>"+rep_+"</span>";
 						str=rep+str.substr(p_);
 						add+=rep.length-(p_);
 					}
@@ -983,7 +1033,30 @@ var Ecode = {
 							rep="<span class='math'>"+rep+"</span>";
 						}
 						else{
-							rep="<span class='var'>"+rep+"</span>";
+							var temp=rep.split(" ");
+							var rep_="";
+							for(var c=0;c<temp.length;c++){
+								var temp_=temp[c];
+								var sp=temp[c].indexOf("<");
+								if(sp>-1){
+									temp_=temp[c].substr(0,sp);
+								}
+								for(var d=0;d<sysSta.length;d++){
+									if(temp_==sysSta[d]){
+										temp_="<span class='logicStatic'>"+temp_+"</span>";
+									}
+								}
+								for(var d=0;d<sysCom2.length;d++){
+									if(temp_==sysCom2[d]){
+										temp_="<span class='logic'>"+temp_+"</span>";
+									}
+								}
+								rep_+=" "+temp_;
+							}
+							if(temp.length==0){
+								rep_=rep;
+							}
+							rep="<span class='var'>"+rep_+"</span>";
 						}
 						str=str.substr(0,add+p+7)+rep+str.substr(add+p2);
 						add+=rep.length-(p2-p-7);
