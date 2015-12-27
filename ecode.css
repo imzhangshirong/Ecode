@@ -24,7 +24,7 @@
 	padding: 1px;
 	padding-bottom: 10px;
 }
-.ecode table,.ecode p,.ecode ul,.ecode li,.ecode .function,.ecode .assembly{
+.ecode table,.ecode p, .ecode ul,.ecode li,.ecode .function,.ecode .assembly{
 	position: relative;
 	float: left;
 	clear: left;

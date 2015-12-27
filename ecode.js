@@ -32,13 +32,13 @@ var Ecode = {
 			{origi:".变量循环首",replace:"<span class='sysCommand cycle'>变量循环首</span>"},
 			{origi:".变量循环尾",replace:"<span class='sysCommand'>变量循环尾</span>"},
 			{origi:".循环判断首",replace:"<span class='sysCommand cycle'>循环判断首</span>"},
-			{origi:".循环判断尾",replace:"<span class='sysCommand'>循环判断尾</span>"},
+			{origi:".循环判断尾",replace:"<span class='sysCommand'>循环判断尾</span>"}
 		];
 		var sysCom=[
 			"返回",
 			"跳出循环",
 			"到循环尾",
-			"结束",
+			"结束"
 		];
 		var sysCom2=[
 			"或",
