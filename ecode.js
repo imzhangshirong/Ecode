@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                            Ecode 3.5                      *//
+//*                           Ecode 3.5.1                     *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 var Ecode = {
@@ -70,8 +70,9 @@ var Ecode = {
 						if (trim(lineCodes[b]).substr(0, 1) == ".") {
 							var tableCode = lineCodes[b].split(",");
 							for (var c = 0; c < tableCode.length; c++) {
-								tableCode[c] = trim(tableCode[c]);
+								tableCode[c] = tableCode[c];
 							}
+							tableCode[0]=trim(tableCode[0])
 							var p = tableCode[0].indexOf(" ");
 							if(p==-1){
 								p=tableCode[0].length;
@@ -468,9 +469,7 @@ var Ecode = {
 				if(!isArray(origiArr[b])){
 					if(origiArr[b].type==".程序集"){
 						html+="<table class='assembly_table'><tr><th>程序集名</th><th>保留</th><th>保留</th><th>备注</th></tr>";
-						for(var c=origiArr[b].parameter.length;c<4;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 						html+=tablePara(4,origiArr[b].parameter);
 						lastPart=0;//程序集
@@ -485,9 +484,7 @@ var Ecode = {
 							html+="<tr><th>变量名</th><th>类型</th><th>数组</th><th>备注</th></tr>";
 							lastPart=0.1;//程序集变量
 						}
-						for(var c=origiArr[b].parameter.length;c<4;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 						html+=tablePara(4,origiArr[b].parameter);
@@ -511,9 +508,7 @@ var Ecode = {
 						else{
 							html+="</table></div><div class='function'><table class='function_table'><tr><th>子程序名</th><th>返回值类型</th><th>公开</th><th colspan='3'>备注</th></tr>";
 						}
-						for(var c=origiArr[b].parameter.length;c<4;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(4,origiArr[b].parameter);
 						if(origiArr[b].parameter[2]=="公开"){
 							origiArr[b].parameter[2]="√";
 						}
@@ -530,9 +525,7 @@ var Ecode = {
 						else if(lastPart==3){
 							html+="<tr><th>参数名</th><th>类型</th><th>传址</th><th>数组</th><th>备注</th></tr>";
 						}
-						for(var c=origiArr[b].parameter.length;c<5;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(5,origiArr[b].parameter);
 						if(lastPart>=3 && lastPart<4){
 							var temp="";
 							if(origiArr[b].parameter[2]=="传址 数组"){
@@ -592,9 +585,7 @@ var Ecode = {
 							html+="<table class='variable_table'><tr><th>变量名</th><th>类型</th><th>静态</th><th>数组</th><th>备注</th></tr>";
 							lastPart=2;//局部变量
 						}
-						for(var c=origiArr[b].parameter.length;c<5;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(5,origiArr[b].parameter);
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 						origiArr[b].parameter[4]="<span class='remark'>"+origiArr[b].parameter[4].replace(/ /g,"&nbsp;")+"</span>";
 						origiArr[b].parameter[3]=origiArr[b].parameter[3].replace(/"/g,"");
@@ -610,9 +601,7 @@ var Ecode = {
 							html+="</table></div>";
 						}
 						html+="<div class='dllFunction'><table class='dllFunction_table'><tr><th>Dll命令名</th><th>返回值类型</th><th>公开</th><th colspan='2'>备注</th></tr>";
-						for(var c=origiArr[b].parameter.length;c<6;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(6,origiArr[b].parameter);
 						if(origiArr[b].parameter[4]=="公开"){
 							origiArr[b].parameter[4]="√";
 						}
@@ -629,9 +618,7 @@ var Ecode = {
 							html+="</table></div>";
 							html+="<div class='statics'><table class='statics_table'><tr><th>常量名称</th><th>常量值</th><th>公开</th><th>备注</th></tr>";
 						}
-						for(var c=origiArr[b].parameter.length;c<4;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(4,origiArr[b].parameter);
 						var temp=trim(origiArr[b].parameter[1].replace(/"/g,""));
 						if(Number(temp)==temp && temp!=""){
 							origiArr[b].parameter[1]="<span class='math'>"+temp+"</span>";
@@ -653,9 +640,7 @@ var Ecode = {
 							html+="</table></div>";
 							html+="<div class='selfDataType'><table class='selfDataType_table'><tr><th>数据类型名</th><th>公开</th><th colspan='3'>备注</th></tr>";
 						}
-						for(var c=origiArr[b].parameter.length;c<4;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[0]="<span class='dataType'>"+origiArr[b].parameter[0]+"</span>";
 						origiArr[b].parameter[2]="<span class='remark'>"+origiArr[b].parameter[2].replace(/ /g,"&nbsp;")+"</span>";
 						if(origiArr[b].parameter[1]=="公开"){
@@ -669,9 +654,7 @@ var Ecode = {
 						if(lastPart==5){
 							html+="<tr><th>成员名</th><th>类型</th><th>传址</th><th>数组</th><th>备注</th></tr>";
 						}
-						for(var c=origiArr[b].parameter.length;c<5;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(5,origiArr[b].parameter);
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 						origiArr[b].parameter[4]="<span class='remark'>"+origiArr[b].parameter[4].replace(/ /g,"&nbsp;")+"</span>";
 						origiArr[b].parameter[3]=origiArr[b].parameter[3].replace(/"/g,"");
@@ -687,9 +670,7 @@ var Ecode = {
 							html+="</table></div>";
 							html+="<div class='globalVariable'><table class='globalVariable_table'><tr><th>全局变量名</th><th>全类型</th><th>数组</th><th>公开</th><th>备注</th></tr>";
 						}
-						for(var c=origiArr[b].parameter.length;c<5;c++){
-							origiArr[b].parameter[c]="";
-						}
+						dealTablePara(5,origiArr[b].parameter);
 						origiArr[b].parameter[4]="<span class='remark'>"+origiArr[b].parameter[4].replace(/ /g,"&nbsp;")+"</span>";
 						var temp=origiArr[b].parameter[3];
 						origiArr[b].parameter[3]=origiArr[b].parameter[2];
@@ -1066,6 +1047,16 @@ var Ecode = {
 				remark+=add;
 			}
 			return str;
+		}
+		function dealTablePara(cols,origiArr){
+			for(var c=origiArr.length;c<cols;c++){
+				origiArr[c]="";
+			}
+			if(origiArr.length>cols){
+				for(var c=cols;c<origiArr.length;c++){
+					origiArr[cols-1]+=","+origiArr[c];
+				}
+			}
 		}
 		function tablePara(cols,origiArr,start,num){
 			var temp="";
