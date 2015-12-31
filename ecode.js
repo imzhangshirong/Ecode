@@ -1040,7 +1040,6 @@ var Ecode = {
 			var arr=new Array();
 			var keep="";
 			var keepStop=1;
-			console.log(origiArr);
 			for(var c=origiArr.length;c<cols;c++){
 				origiArr[c]="";
 			}
@@ -1080,7 +1079,6 @@ var Ecode = {
 			if(keep!=""){
 				arr[arr.length]=keep;
 			}
-			console.log(arr)
 			if(arr.length>cols){
 				for(var c=cols;c<arr.length;c++){
 					arr[cols-1]+=","+arr[c];
