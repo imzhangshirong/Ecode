@@ -469,7 +469,7 @@ var Ecode = {
 				if(!isArray(origiArr[b])){
 					if(origiArr[b].type==".程序集"){
 						html+="<table class='assembly_table'><tr><th>程序集名</th><th>保留</th><th>保留</th><th>备注</th></tr>";
-						dealTablePara(4,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 						html+=tablePara(4,origiArr[b].parameter);
 						lastPart=0;//程序集
@@ -484,7 +484,7 @@ var Ecode = {
 							html+="<tr><th>变量名</th><th>类型</th><th>数组</th><th>备注</th></tr>";
 							lastPart=0.1;//程序集变量
 						}
-						dealTablePara(4,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 						html+=tablePara(4,origiArr[b].parameter);
@@ -508,8 +508,9 @@ var Ecode = {
 						else{
 							html+="</table></div><div class='function'><table class='function_table'><tr><th>子程序名</th><th>返回值类型</th><th>公开</th><th colspan='3'>备注</th></tr>";
 						}
-						dealTablePara(4,origiArr[b].parameter);
-						if(origiArr[b].parameter[2]=="公开"){
+						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
+						origiArr[b].parameter[2]=trim(origiArr[b].parameter[2]);
+						if(origiArr[b].parameter[2].indexOf("公开")>-1){
 							origiArr[b].parameter[2]="√";
 						}
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
@@ -525,21 +526,18 @@ var Ecode = {
 						else if(lastPart==3){
 							html+="<tr><th>参数名</th><th>类型</th><th>传址</th><th>数组</th><th>备注</th></tr>";
 						}
-						dealTablePara(5,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
+						origiArr[b].parameter[2]=trim(origiArr[b].parameter[2]);
 						if(lastPart>=3 && lastPart<4){
 							var temp="";
-							if(origiArr[b].parameter[2]=="传址 数组"){
-								temp="√</td><td>√";
+							if(origiArr[b].parameter[2].indexOf("传址")>-1){
+								temp+="√";
 							}
-							else if(origiArr[b].parameter[2]=="传址"){
-								temp="√</td><td>";
+							temp+="</td><td>";
+							if(origiArr[b].parameter[2].indexOf("数组")>-1){
+								temp+="√";
 							}
-							else if(origiArr[b].parameter[2]=="数组"){
-								temp="</td><td>√";
-							}
-							else{
-								temp="</td><td>";
-							}
+							origiArr[b].parameter[2]=temp;
 							origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 							origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 							origiArr[b].parameter[2]=temp;
@@ -547,30 +545,19 @@ var Ecode = {
 							lastPart=3.1;
 						}
 						else if(lastPart>=1 && lastPart<2){
-							if(origiArr[b].parameter[2]=="参考 可空 数组"){
-								origiArr[b].parameter[2]="√</td><td>√</td><td>√";
+							var temp="";
+							if(origiArr[b].parameter[2].indexOf("参考")>-1){
+								temp+="√";
 							}
-							else if(origiArr[b].parameter[2]=="参考 可空"){
-								origiArr[b].parameter[2]="√</td><td>√</td><td>";
+							temp+="</td><td>";
+							if(origiArr[b].parameter[2].indexOf("可空")>-1){
+								temp+="√";
 							}
-							else if(origiArr[b].parameter[2]=="参考 数组"){
-								origiArr[b].parameter[2]="√</td><td></td><td>√";
+							temp+="</td><td>";
+							if(origiArr[b].parameter[2].indexOf("数组")>-1){
+								temp+="√";
 							}
-							else if(origiArr[b].parameter[2]=="可空 数组"){
-								origiArr[b].parameter[2]="</td><td>√</td><td>√";
-							}
-							else if(origiArr[b].parameter[2]=="参考"){
-								origiArr[b].parameter[2]="√</td><td></td><td>";
-							}
-							else if(origiArr[b].parameter[2]=="可空"){
-								origiArr[b].parameter[2]="</td><td>√</td><td>";
-							}
-							else if(origiArr[b].parameter[2]=="数组"){
-								origiArr[b].parameter[2]="</td><td></td><td>√";
-							}
-							else{
-								origiArr[b].parameter[2]="</td><td></td><td>";
-							}
+							origiArr[b].parameter[2]=temp;
 							origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 							origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 							html+=tablePara(4,origiArr[b].parameter);
@@ -585,11 +572,12 @@ var Ecode = {
 							html+="<table class='variable_table'><tr><th>变量名</th><th>类型</th><th>静态</th><th>数组</th><th>备注</th></tr>";
 							lastPart=2;//局部变量
 						}
-						dealTablePara(5,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
+						origiArr[b].parameter[2]=trim(origiArr[b].parameter[2]);
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 						origiArr[b].parameter[4]="<span class='remark'>"+origiArr[b].parameter[4].replace(/ /g,"&nbsp;")+"</span>";
 						origiArr[b].parameter[3]=origiArr[b].parameter[3].replace(/"/g,"");
-						if(origiArr[b].parameter[2]=="静态"){
+						if(origiArr[b].parameter[2].indexOf("静态")>-1){
 							origiArr[b].parameter[2]="√";
 						}
 						html+=tablePara(5,origiArr[b].parameter);
@@ -601,7 +589,7 @@ var Ecode = {
 							html+="</table></div>";
 						}
 						html+="<div class='dllFunction'><table class='dllFunction_table'><tr><th>Dll命令名</th><th>返回值类型</th><th>公开</th><th colspan='2'>备注</th></tr>";
-						dealTablePara(6,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(6,origiArr[b].parameter);
 						if(origiArr[b].parameter[4]=="公开"){
 							origiArr[b].parameter[4]="√";
 						}
@@ -618,7 +606,7 @@ var Ecode = {
 							html+="</table></div>";
 							html+="<div class='statics'><table class='statics_table'><tr><th>常量名称</th><th>常量值</th><th>公开</th><th>备注</th></tr>";
 						}
-						dealTablePara(4,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
 						var temp=trim(origiArr[b].parameter[1].replace(/"/g,""));
 						if(Number(temp)==temp && temp!=""){
 							origiArr[b].parameter[1]="<span class='math'>"+temp+"</span>";
@@ -628,7 +616,7 @@ var Ecode = {
 						}
 						origiArr[b].parameter[0]="<span class='static'>"+origiArr[b].parameter[0]+"</span>";
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
-						if(origiArr[b].parameter[2]=="公开"){
+						if(origiArr[b].parameter[2].indexOf("公开")>-1){
 							origiArr[b].parameter[2]="√";
 						}
 						html+=tablePara(4,origiArr[b].parameter);
@@ -640,10 +628,10 @@ var Ecode = {
 							html+="</table></div>";
 							html+="<div class='selfDataType'><table class='selfDataType_table'><tr><th>数据类型名</th><th>公开</th><th colspan='3'>备注</th></tr>";
 						}
-						dealTablePara(4,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[0]="<span class='dataType'>"+origiArr[b].parameter[0]+"</span>";
 						origiArr[b].parameter[2]="<span class='remark'>"+origiArr[b].parameter[2].replace(/ /g,"&nbsp;")+"</span>";
-						if(origiArr[b].parameter[1]=="公开"){
+						if(origiArr[b].parameter[1].indexOf("公开")>-1){
 							origiArr[b].parameter[1]="√";
 						}
 						html+=tablePara(3,origiArr[b].parameter,2,3);
@@ -654,11 +642,11 @@ var Ecode = {
 						if(lastPart==5){
 							html+="<tr><th>成员名</th><th>类型</th><th>传址</th><th>数组</th><th>备注</th></tr>";
 						}
-						dealTablePara(5,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 						origiArr[b].parameter[4]="<span class='remark'>"+origiArr[b].parameter[4].replace(/ /g,"&nbsp;")+"</span>";
 						origiArr[b].parameter[3]=origiArr[b].parameter[3].replace(/"/g,"");
-						if(origiArr[b].parameter[2]=="传址"){
+						if(origiArr[b].parameter[2].indexOf("传址")>-1){
 							origiArr[b].parameter[2]="√";
 						}
 						html+=tablePara(5,origiArr[b].parameter);
@@ -670,12 +658,12 @@ var Ecode = {
 							html+="</table></div>";
 							html+="<div class='globalVariable'><table class='globalVariable_table'><tr><th>全局变量名</th><th>全类型</th><th>数组</th><th>公开</th><th>备注</th></tr>";
 						}
-						dealTablePara(5,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
 						origiArr[b].parameter[4]="<span class='remark'>"+origiArr[b].parameter[4].replace(/ /g,"&nbsp;")+"</span>";
 						var temp=origiArr[b].parameter[3];
 						origiArr[b].parameter[3]=origiArr[b].parameter[2];
 						origiArr[b].parameter[2]=temp;
-						if(origiArr[b].parameter[3]=="公开"){
+						if(origiArr[b].parameter[3].indexOf("公开")>-1){
 							origiArr[b].parameter[3]="√";
 						}
 
@@ -1049,14 +1037,57 @@ var Ecode = {
 			return str;
 		}
 		function dealTablePara(cols,origiArr){
+			var arr=new Array();
+			var keep="";
+			var keepStop=1;
+			console.log(origiArr);
 			for(var c=origiArr.length;c<cols;c++){
 				origiArr[c]="";
 			}
-			if(origiArr.length>cols){
-				for(var c=cols;c<origiArr.length;c++){
-					origiArr[cols-1]+=","+origiArr[c];
+			for(var c=0;c<origiArr.length;c++){
+				var temp=trim(origiArr[c]);
+				if(temp.substr(0,1)!='"' && temp.substr(-1)!='"'){
+					if(keepStop){
+						arr[arr.length]=origiArr[c];
+					}
+					else{
+						keep+=","+origiArr[c];
+					}
+				}
+				else{
+
+					if(temp.substr(0,1)=='"' && temp.substr(-1)=='"' && temp.length>1){
+						arr[arr.length]=origiArr[c];
+						keep="";
+						keepStop=1;
+					}
+					else{
+						if(keepStop==0){
+							keep+=",";
+						}
+						keep+=origiArr[c];
+						if(keepStop==0){
+							arr[arr.length]=keep;
+							keep="";
+							keepStop=1;
+						}
+						else{
+							keepStop=0;
+						}
+					}
 				}
 			}
+			if(keep!=""){
+				arr[arr.length]=keep;
+			}
+			console.log(arr)
+			if(arr.length>cols){
+				for(var c=cols;c<arr.length;c++){
+					arr[cols-1]+=","+arr[c];
+				}
+				arr.length=cols;
+			}
+			return arr;
 		}
 		function tablePara(cols,origiArr,start,num){
 			var temp="";

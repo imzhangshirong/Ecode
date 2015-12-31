@@ -95,6 +95,7 @@
 .局部变量 dwRet, 整数型
 .局部变量 prHandle, 整数型
 .局部变量 pe32, PROCESSENTRY32
+.局部变量 test, , ,"111,222,444",3434,"2323,","
 
 hSnapShot ＝ CreateToolhelp32Snapshot (#TH32CS_SNAPALL, 0)
 .如果真 (hSnapShot ＝ 0)
@@ -114,6 +115,7 @@ prHandle ＝ Process32First (hSnapShot, pe32)
 .判断循环尾 ()
 CloseHandle (hSnapShot)
 返回 (dwRet)
+
 
 </textarea>
             <a href="javascript:putin()" id="button">绘制代码</a>
