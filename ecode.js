@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                           Ecode 3.5.1                     *//
+//*                           Ecode 3.5.3                     *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 var Ecode = {
@@ -151,20 +151,46 @@ var Ecode = {
 					//处理高度//////////////////////////////////////
 					for(var b=0;b<eleEcodeUl.length;b++){
 						var parent=eleEcodeUl[b];
-						var def;
+						var def=0;
 						var close=parent.children.length-1;
-						for(var c=2;c<parent.children.length;c++){
-							var temp=parent.children[c].querySelector(".def");
-							if(temp && temp.parentElement.parentElement==parent.children[c]){
-								def=c;
-								break;
+						var all=new Array();
+						for(var c=2;c<parent.children.length-1;c++){
+							var temp=parent.children[c].querySelector("p .judgeChild");
+							if(temp){
+								var par=temp.parentElement.parentElement.parentElement;
+								if(par==parent) {
+									all[all.length] = c;
+								}
 							}
+							var temp=parent.children[c].querySelector("p .def");
+							if(temp){
+								var par=temp.parentElement.parentElement.parentElement;
+								if(par==parent) {
+									def = c;
+								}
+							}
+						}
+						if(all.length){
+							if(all[0] && all[0]-2==1){
+								parent.children[2].style.marginBottom="20px";
+							}
+							for(var c=0;c<all.length;c++){
+								if(all[c+1]-all[c]==1){
+									parent.children[all[c]].style.marginBottom="20px";
+								}
+							}
+							parent.children[close].style.marginBottom="20px";
 						}
 						if(def==3){
 							parent.children[2].style.marginBottom="20px";
 						}
 						if(def+1==close){
 							parent.children[def].style.marginBottom="20px";
+						}
+						if(parent.children[close-1].children[0].tagName=="UL"){
+							//console.log(parent.children[close-1])
+							parent.children[close].style.height="20px";
+							//parent.children[close].style.marginBottom="20px";
 						}
 						var nextParent;
 						if(parent.parentElement && parent.parentElement.nextElementSibling){
@@ -192,6 +218,9 @@ var Ecode = {
 						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
 							turn0=1;
 						}
+						if(parentLast && parentLast.querySelector(".def")){
+							turn0=1;
+						}
 						if(parentNext && parentNext.querySelector(".sysCommand") && parentNext.children[2] && parentNext.children[2] ==parentNext.querySelector(".sysCommand").parentElement){
 							turn1=1;
 						}
@@ -208,9 +237,9 @@ var Ecode = {
 						else{
 							line1.style.display="none";
 							line2.style.height=close.offsetTop-10-add+"px";
+							line2.style.top=10+add+"px";
 							line2.style.left="2px";
 							line2.style.width="15px";
-							line2.style.top=10+add+"px";
 							line2.style.display="block";
 							line2.querySelector(".triangle-down").style.display="block";
 						}
@@ -273,13 +302,13 @@ var Ecode = {
 							if(add==0){
 								add=6;
 							}
-							line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+20-add+"px";
+							line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+20-add+parent.children[close].offsetHeight+"px";
 							line2.style.top=parent.children[def].offsetTop-10+"px";
 							line2.style.display="block";
 						}
 						else{
 							line2.querySelector(".triangle-down").style.display="block";
-							line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+10+"px";
+							line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+10+parent.children[close].offsetHeight+"px";
 							line2.style.top=parent.children[def].offsetTop-10+"px";
 							line2.style.display="block";
 						}
@@ -307,6 +336,7 @@ var Ecode = {
 						line1.querySelector(".triangle-right").style.top="-5px";
 						line1.querySelector(".triangle-right").style.display="block";
 					}
+					//判断//////////////////////////////////////
 					for(var b=0;b<eleEcodeJudge.length;b++){
 						var parent=eleEcodeJudge[b].parentElement.parentElement;
 						var parentLast;
@@ -351,7 +381,7 @@ var Ecode = {
 						}
 						if(parent.parentElement.previousElementSibling){
 							var defLastSys=parent.parentElement.previousElementSibling;
-							if(defLastSys.children[0].children[0]==defLastSys.querySelector(".def") && defLastSys.tagName=="LI"){
+							if(defLastSys.children[0] && defLastSys.children[0].children[0]==defLastSys.querySelector(".def") && defLastSys.tagName=="LI"){
 								turn0=1;
 							}
 						}
@@ -365,35 +395,29 @@ var Ecode = {
 						var line1_;
 						var line2_;
 						var line3_;
+						if(all[0] && all[0]-2==1){
+							parent.children[2].style.marginBottom="20px";
+						}
 						for(var c=0;c<all.length;c++){
 							line1_=parent.children[all[c]].children[0].children[0].children[0];
 							line2_=parent.children[all[c]].children[0].children[0].children[1];
 							line3_=line1_.children[2];
 							line1_.style.top=10+4+"px";
-							line1_.style.left=-20+"px";
-							var temp;
-							var k=0;
-							if(c==all.length-1){
-								temp=parent.children[def].offsetTop+20+6;
+							line1_.style.left=-18+"px";
+							var temp=0;
+							if(c+1==all.length){
 								if(def-all[c]==1){
-									k=1;
+									parent.children[all[c]].style.marginBottom="20px";
 								}
-								else{
-									temp-=20;
-								}
+								temp=parent.children[def].offsetTop+4;
 							}
 							else{
-								temp=parent.children[all[c+1]].offsetTop+20;
 								if(all[c+1]-all[c]==1){
-									k=1;
+									parent.children[all[c]].style.marginBottom="20px";
 								}
-								else{
-									temp-=20;
-								}
+								temp=parent.children[all[c+1]].offsetTop;
 							}
-							if(k==1){
-								parent.children[all[c]].style.marginBottom="20px";
-							}
+
 							line1_.style.height=temp-parent.children[all[c]].offsetTop-10+"px";
 							line1_.querySelector(".triangle-right").style.display="block";
 							line1_.querySelector(".triangle-right").style.bottom="-5px";
@@ -415,12 +439,12 @@ var Ecode = {
 							else{
 								line2.querySelector(".triangle-down").style.display="block";
 							}
-							line2.style.height=parent.children[close].offsetTop-parent.children[all[0]].offsetTop+20-add+"px";
+							line2.style.height=parent.children[close].offsetTop-parent.children[all[0]].offsetTop+20-add+parent.children[close].offsetHeight-6+"px";
 							line2.style.top=parent.children[all[0]].offsetTop-10+"px";
 							line2.style.display="block";
 							if(turn2){
 								line1_.style.borderBottomWidth="0px";
-								line1_.style.height=line1.clientHeight-6+"px";
+								line1_.style.height=line1_.offsetHeight-4+"px";
 								line1_.querySelector(".triangle-right").style.left="30px";
 								line3_.style.display="block";
 							}
@@ -433,12 +457,12 @@ var Ecode = {
 								if(add==0){
 									add=6;
 								}
-								line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+20-add+"px";
+								line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+20-add+parent.children[close].offsetHeight+"px";
 
 							}
 							else{
 								line2.querySelector(".triangle-down").style.display="block";
-								line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+10+"px";
+								line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+10+parent.children[close].offsetHeight+"px";
 							}
 							line2.style.top=parent.children[def].offsetTop-10+"px";
 							line2.style.display="block";
@@ -448,6 +472,7 @@ var Ecode = {
 								line1.querySelector(".triangle-right").style.left="30px";
 								line3.style.display="block";
 							}
+
 						}
 					}
 					eleEcodeShow.style.height=eleEcodeShow.parentElement.clientHeight-40+"px";
@@ -461,6 +486,17 @@ var Ecode = {
 		}
 		function isArray(o) {
 			return Object.prototype.toString.call(o) === '[object Array]';
+		}
+		function inQuote(quoteMat,position){
+			var a;
+			var k=0;
+			for(a=0;a<quoteMat.length;a++){
+				if(position<quoteMat[a][1] && position>quoteMat[a][0]){
+					k=a+1;
+					break;
+				}
+			}
+			return k;
 		}
 		function drawn(origiArr){
 			var html="";
@@ -590,7 +626,7 @@ var Ecode = {
 						}
 						html+="<div class='dllFunction'><table class='dllFunction_table'><tr><th>Dll命令名</th><th>返回值类型</th><th>公开</th><th colspan='2'>备注</th></tr>";
 						origiArr[b].parameter=dealTablePara(6,origiArr[b].parameter);
-						if(origiArr[b].parameter[4]=="公开"){
+						if(origiArr[b].parameter[4].indexOf("公开")>-1){
 							origiArr[b].parameter[4]="√";
 						}
 						html+="<tr><td>"+origiArr[b].parameter[0]+"</td><td><span class='dataType'>"+origiArr[b].parameter[1]+"</span></td><td>"+origiArr[b].parameter[4]+"</td><td colspan='2'><span class='remark'>"+origiArr[b].parameter[5]+"</span></td></tr>";
@@ -740,16 +776,17 @@ var Ecode = {
 			var str=codeStr;
 			var add=0;
 			//var addRemark=0;
-			var remark=codeStr.length;
 			if(type){
 				//高亮注释/////////////////////////////////
+				var remark=codeStr.indexOf("'",0);
 				var quote=findMatchStr("“","”",codeStr);
 				while(remark>-1){
-					remark=codeStr.lastIndexOf("'",remark-1);
-					if(quote.length>0){
-						if(quote[quote.length-1][1]<remark || quote[quote.length-1][0]>remark){break;}
+					if(remark==0)break;
+					var inQ=inQuote(quote,remark);
+					if(!inQ){
+						break;
 					}
-					else{break;}
+					remark=codeStr.indexOf("'",remark+1);
 				}
 				if(remark==-1){
 					remark=codeStr.length;
@@ -766,13 +803,7 @@ var Ecode = {
 					var p=a;
 					var temp=str.substr(p,1);
 					if(compuStr.indexOf(temp)>-1){
-						var k=0;
-						for(var b=0;b<quote.length;b++){
-							if(quote[b][0]<p && quote[b][1]>p){
-								k=1;
-								break;
-							}
-						}
+						var k=inQuote(quote,p);
 						if(k==0){
 							temp="<span class='operator'>"+temp+"</span>";
 							codeStr=codeStr.substr(0,add+p)+temp+codeStr.substr(add+p+1);
@@ -800,12 +831,7 @@ var Ecode = {
 				while(statics>-1){
 					var k=0;
 					if(statics<remark){
-						for(var a=0;a<quote.length;a++){
-							if((quote[a][0]<statics && quote[a][1]>statics)){
-								k=1;
-								break;
-							}
-						}
+						k=inQuote(quote,statics);
 					}
 					else{
 						k=1;
@@ -852,16 +878,8 @@ var Ecode = {
 			var quote=findMatchStr("“","”",codeStr);
 			var bracket0=findMatchStr("(",")",codeStr);
 			for(var a=0;a<bracket0.length;a++){
-				var k=0;
-				if(bracket0[a][0]<remark){
-					for(var b=0;b<quote.length;b++){
-						if((quote[b][0]<bracket0[a][0] && quote[b][1]>bracket0[a][1])){
-							k=1;
-							break;
-						}
-					}
-				}
-				else{
+				var k=(inQuote(quote,bracket0[a][0]) && inQuote(quote,bracket0[a][1]));
+				if(type && bracket0[a][0]>remark){
 					k=1;
 				}
 				if(k==0){
@@ -925,13 +943,7 @@ var Ecode = {
 					var p=a;
 					var temp=str.substr(p,1);
 					if(compuStr.indexOf(temp)>-1){
-						var k=0;
-						for(var b=0;b<quote.length;b++){
-							if(quote[b][0]<p && quote[b][1]>p){
-								k=1;
-								break;
-							}
-						}
+						var k=inQuote(quote,p);
 						if(k==0){
 							if(temp=="(" || temp==")"){
 								temp="<span class='bracket0'>"+temp;
@@ -981,19 +993,18 @@ var Ecode = {
 						if(temp.length==0){
 							rep_=rep;
 						}
-						rep="<span class='var'>"+rep_+"</span>";
+						if(trim(rep_)){
+							rep="<span class='var'>"+rep_+"</span>";
+						}
+						else{
+							rep_="";
+						}
 						str=rep+str.substr(p_);
 						add+=rep.length-(p_);
 					}
 				}
 				while(p>-1 && p<remark){
-					var k=0;
-					for(var b=0;b<quote.length;b++){
-						if(quote[b][0]<p && quote[b][1]>p){
-							k=1;
-							break;
-						}
-					}
+					var k=inQuote(quote,p);
 					if(k==0){
 						var p2=codeStr.indexOf("<span",p);
 						if(p2==-1){p2=codeStr.length}
@@ -1025,7 +1036,12 @@ var Ecode = {
 							if(temp.length==0){
 								rep_=rep;
 							}
-							rep="<span class='var'>"+rep_+"</span>";
+							if(trim(rep_)){
+								rep="<span class='var'>"+rep_+"</span>";
+							}
+							else{
+								rep_="";
+							}
 						}
 						str=str.substr(0,add+p+7)+rep+str.substr(add+p2);
 						add+=rep.length-(p2-p-7);

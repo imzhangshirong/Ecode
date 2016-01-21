@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>易语言代码框Ecode3.5.1在线测试</title>
+	<title>易语言代码框Ecode3.5.3在线测试</title>
     <meta name="viewport" content="width=480, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <meta name="renderer" content="webkit">
-    <meta name="keywords" content="易语言代码框,Ecode3.5.1,张施荣,zhangshirong,Jarvis,Jarvis Zhang,开源,J.A.I.S">
-    <meta name="description" content="张施荣的开源项目,易语言代码框Ecode3.5.1在线测试" >
+    <meta name="keywords" content="易语言代码框,Ecode3.5.3,张施荣,zhangshirong,Jarvis,Jarvis Zhang,开源,J.A.I.S">
+    <meta name="description" content="张施荣的开源项目,易语言代码框Ecode3.5.3在线测试" >
     <meta name="author" Content="张施荣,zhangshirong,Jarvis">
     <link rel="stylesheet" type="text/css" href="ecode.css">
     <style>
@@ -43,11 +43,19 @@
     </style>
 </head>
 <body>
-<div id="head"><span style="font-size: 34px;line-height: 100px">Ecode 3.5.1</span> <span>在线演示
-</span><div style="right: 0px;bottom: 20px;position: absolute"><a href="./download/ecode3.5.1.zip">Ecode3.5.1下载</a><a href="https://github.com/imzhangshirong/Ecode" target="_blank">Github</a></div></div>
+<div id="head"><span style="font-size: 34px;line-height: 100px">Ecode 3.5.3</span> <span>在线演示
+</span><div style="right: 0px;bottom: 20px;position: absolute"><a href="./download/ecode3.5.3.zip">Ecode3.5.3下载</a><a href="https://github.com/imzhangshirong/Ecode" target="_blank">Github</a></div></div>
 <div id="info">
     <p style="font-size: 16px;line-height: 40px;text-indent: 10px">更新说明 ></p>
     <div style="text-indent: 2em">
+        <p style="font-size: 16px;line-height: 20px;margin-top: 10px;margin-bottom: 10px">Verson 3.5.3</p>
+        <p>1、修复DLL公开勾符号</p>
+        <p>2、修复单个判断流程线js报错</p>
+        <p>3、修复备注高亮错误</p>
+        <p>4、修复判断嵌套错误</p>
+        <p>5、修复如果真流程线某些情况下出现过长</p>
+        <p>6、修复命令嵌套未高亮</p>
+        <p>7、改进流程线，更接近易语言原版IDE</p>
         <p style="font-size: 16px;line-height: 20px;margin-top: 10px;margin-bottom: 10px">Verson 3.5.1</p>
         <p>1、修复表格备注半角引号后内容不显示</p>
         <p style="font-size: 16px;line-height: 20px;margin-top: 10px;margin-bottom: 10px">Verson 3.5</p>
@@ -96,7 +104,13 @@
 .局部变量 prHandle, 整数型
 .局部变量 pe32, PROCESSENTRY32
 .局部变量 test, , ,"111,222,444",3434,"2323,","
+.局部变量 test2, , , ,34weeeee34,"2323,","
 
+.判断开始 (test2)
+        输出调试文本(“啊哈哈哈哈”)
+    .默认
+       输出调试文本(“啊哈哈哈哈”)
+    .判断结束
 hSnapShot ＝ CreateToolhelp32Snapshot (#TH32CS_SNAPALL, 0)
 .如果真 (hSnapShot ＝ 0)
     信息框 (“获得进程快照失败”, 0, )
@@ -115,8 +129,40 @@ prHandle ＝ Process32First (hSnapShot, pe32)
 .判断循环尾 ()
 CloseHandle (hSnapShot)
 返回 (dwRet)
+'test'12333###{}()“测试'''”
+'//////////////////判断流程测试///////////////////////////
+.如果 ()
+.否则
+    .如果 ()
+    .否则
+        .如果 ()
+            .如果 ()
+            .否则
+            .如果结束
+        .否则
+            .如果 ()
+            .否则
+                .判断开始 ()
+                .判断 ()
+                .判断 ()
+                .默认
+                    .判断开始 ()
+                    .默认
+                    .判断结束
+ .判断开始 ()
+                .判断 ()
+                .判断 ()
+                .默认
+                    .判断开始 ()
+                    .默认
+                    .判断结束
 
-
+                .判断结束
+                .判断结束
+            .如果结束
+        .如果结束
+    .如果结束
+.如果结束
 </textarea>
             <a href="javascript:putin()" id="button">绘制代码</a>
         </div>
@@ -777,4 +823,5 @@ CloseHandle (hSnapShot)
     }
     putin();
 </script>
+<div style="display: none"><script src="http://s11.cnzz.com/stat.php?id=1257086211&web_id=1257086211" language="JavaScript"></script></div>
 </html>
