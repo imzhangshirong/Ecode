@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                           Ecode 3.5.3                     *//
+//*                           Ecode 3.5.4                     *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 var Ecode = {
@@ -103,6 +103,7 @@ var Ecode = {
 					//程序集单位
 					var assembly=new Array();
 					var limit=findMatchArr(".程序集","",lineCodesR);
+
 					if(limit.length==0){
 						limit=new Array();
 						limit[limit.length]=[0,lineCodesR.length-1];
@@ -113,6 +114,7 @@ var Ecode = {
 							temp[temp.length]=lineCodesR[c];
 						}
 						var limit1=findMatchArr(".子程序","",temp);
+						//console.log(limit1);
 						if(limit1.length>0){
 							var program=new Array();
 							for(var c=limit[b][0];c<limit1[0][0];c++){
@@ -170,17 +172,6 @@ var Ecode = {
 								}
 							}
 						}
-						if(all.length){
-							if(all[0] && all[0]-2==1){
-								parent.children[2].style.marginBottom="20px";
-							}
-							for(var c=0;c<all.length;c++){
-								if(all[c+1]-all[c]==1){
-									parent.children[all[c]].style.marginBottom="20px";
-								}
-							}
-							parent.children[close].style.marginBottom="20px";
-						}
 						if(def==3){
 							parent.children[2].style.marginBottom="20px";
 						}
@@ -188,9 +179,7 @@ var Ecode = {
 							parent.children[def].style.marginBottom="20px";
 						}
 						if(parent.children[close-1].children[0].tagName=="UL"){
-							//console.log(parent.children[close-1])
 							parent.children[close].style.height="20px";
-							//parent.children[close].style.marginBottom="20px";
 						}
 						var nextParent;
 						if(parent.parentElement && parent.parentElement.nextElementSibling){
@@ -200,6 +189,116 @@ var Ecode = {
 							if(nextParent.querySelector(".def") && nextParent.children[0]==nextParent.querySelector(".def").parentElement){
 								parent.children[close].style.marginBottom="20px";
 							}
+						}
+					}
+					//循环//////////////////////////////////////
+					for(var b=0;b<eleEcodeCyc.length;b++){
+						var parent=eleEcodeCyc[b].parentElement.parentElement;
+						var parentLast=parent.parentElement.previousElementSibling;
+						//var close=parentLast.children.length-1;
+						var turn0=0;
+						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[0] && parentLast.children[0].children[2]==parentLast.querySelector(".sysCommand").parentElement ){
+							turn0=1;
+						}
+
+						var add=turn0*5;
+						var line1=parent.children[0];
+						line1.style.top=10+add+"px";
+						line1.style.height=parent.clientHeight-20-add+"px";
+						line1.querySelector(".triangle-right").style.top="-5px";
+						line1.querySelector(".triangle-right").style.display="block";
+					}
+					//判断预处理//////////////////////////////////////
+					var judgeValueFixed=new Array();
+					for(var b=0;b<eleEcodeJudge.length;b++){
+						var tempData=new Object();
+						var parent=eleEcodeJudge[b].parentElement.parentElement;
+						var parentLast;
+						if(parent.parentElement.previousElementSibling){
+							parentLast=parent.parentElement.previousElementSibling.children[0];
+						}
+						var parentNext;
+						if(parent.parentElement.nextElementSibling){
+							parentNext=parent.parentElement.nextElementSibling.children[0];
+						}
+
+						var turn0=0;
+						var turn1=0;
+						var turn2=0;
+						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
+							turn0=1;
+						}
+						if(parentNext && parentNext.querySelector(".sysCommand") && parentNext.children[2] && parentNext.children[2] ==parentNext.querySelector(".sysCommand").parentElement){
+							turn1=1;
+						}
+						var all=new Array();
+						var def;
+						for(var c=2;c<parent.children.length-1;c++){
+							var temp=parent.children[c].querySelector("p .judgeChild");
+							if(temp){
+								var par=temp.parentElement.parentElement.parentElement;
+								if(par==parent) {
+									all[all.length] = c;
+								}
+							}
+							var temp=parent.children[c].querySelector("p .def");
+							if(temp){
+								var par=temp.parentElement.parentElement.parentElement;
+								if(par==parent) {
+									def = c;
+								}
+							}
+						}
+						var close=parent.children.length-1;
+						if(parent.parentElement.previousElementSibling){
+							var defLastSys=parent.parentElement.previousElementSibling;
+							if(defLastSys.children[0] && defLastSys.children[0].children[0]==defLastSys.querySelector(".def") && defLastSys.tagName=="LI"){
+								turn0=1;
+							}
+						}
+						var defNextSys=parent.children[def].nextElementSibling.querySelector(".sysCommand");
+						if(defNextSys){
+							if(parent.children[def].nextElementSibling==defNextSys.parentElement.parentElement.parentElement){
+								turn2=1;
+							}
+						}
+						var add=turn0*4;
+						var line1_;
+						var line2_;
+						var line3_;
+						tempData['parent']=parent;
+						tempData['turn0']=turn0;
+						tempData['turn1']=turn1;
+						tempData['turn2']=turn2;
+						tempData['def']=def;
+						tempData['add']=add;
+						tempData['all']=all;
+						judgeValueFixed[judgeValueFixed.length]=tempData;
+						if(all[0] && all[0]-2==1){
+							parent.children[2].style.marginBottom="20px";
+						}
+						for(var c=0;c<all.length;c++){
+							line1_=parent.children[all[c]].children[0].children[0].children[0];
+							line2_=parent.children[all[c]].children[0].children[0].children[1];
+							line3_=line1_.children[2];
+							line1_.style.top=10+4+"px";
+							line1_.style.left=-18+"px";
+							var temp=0;
+							if(c+1==all.length){
+								if(def-all[c]==1){
+									parent.children[all[c]].style.marginBottom="20px";
+								}
+								temp=parent.children[def].offsetTop+4;
+							}
+							else{
+								if(all[c+1]-all[c]==1){
+									parent.children[all[c]].style.marginBottom="20px";
+								}
+								temp=parent.children[all[c+1]].offsetTop;
+							}
+						}
+						if(parentNext && parentNext.children[0] && (parentNext.children[0].className.indexOf("judgeChild") > 0 || parentNext.children[0].className.indexOf("def") > 0)) {
+							parent.children[close].style.marginBottom = "20px";
 						}
 					}
 					//如果真//////////////////////////////////////
@@ -319,79 +418,20 @@ var Ecode = {
 							line3.style.display="block";
 						}
 					}
-					//循环//////////////////////////////////////
-					for(var b=0;b<eleEcodeCyc.length;b++){
-						var parent=eleEcodeCyc[b].parentElement.parentElement;
-						var parentLast=parent.parentElement.previousElementSibling;
-						//var close=parentLast.children.length-1;
-						var turn0=0;
-						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[0] && parentLast.children[0].children[2]==parentLast.querySelector(".sysCommand").parentElement ){
-							turn0=1;
-						}
-
-						var add=turn0*5;
-						var line1=parent.children[0];
-						line1.style.top=10+add+"px";
-						line1.style.height=parent.clientHeight-20-add+"px";
-						line1.querySelector(".triangle-right").style.top="-5px";
-						line1.querySelector(".triangle-right").style.display="block";
-					}
-					//判断//////////////////////////////////////
+					//计算判断流程线//////////////////////////////////////////
 					for(var b=0;b<eleEcodeJudge.length;b++){
-						var parent=eleEcodeJudge[b].parentElement.parentElement;
-						var parentLast;
-						if(parent.parentElement.previousElementSibling){
-							parentLast=parent.parentElement.previousElementSibling.children[0];
-						}
-						var parentNext;
-						if(parent.parentElement.nextElementSibling){
-							parentNext=parent.parentElement.nextElementSibling.children[0];
-						}
-
-						var turn0=0;
-						var turn1=0;
-						var turn2=0;
-						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
-							turn0=1;
-						}
-						if(parentNext && parentNext.querySelector(".sysCommand") && parentNext.children[2] && parentNext.children[2] ==parentNext.querySelector(".sysCommand").parentElement){
-							turn1=1;
-						}
+						var tempData=judgeValueFixed[b];
+						var parent=tempData['parent'];
+						var turn0=tempData['turn0'];
+						var turn1=tempData['turn1'];
+						var turn2=tempData['turn2'];
 						var line1=parent.children[0];
 						var line2=parent.children[1];
 						var line3=parent.children[0].children[2];
 						var close=parent.children.length-1;
-						var all=new Array();
-						var def;
-						for(var c=2;c<parent.children.length-1;c++){
-							var temp=parent.children[c].querySelector("p .judgeChild");
-							if(temp){
-								var par=temp.parentElement.parentElement.parentElement;
-								if(par==parent) {
-									all[all.length] = c;
-								}
-							}
-							var temp=parent.children[c].querySelector("p .def");
-							if(temp){
-								var par=temp.parentElement.parentElement.parentElement;
-								if(par==parent) {
-									def = c;
-								}
-							}
-						}
-						if(parent.parentElement.previousElementSibling){
-							var defLastSys=parent.parentElement.previousElementSibling;
-							if(defLastSys.children[0] && defLastSys.children[0].children[0]==defLastSys.querySelector(".def") && defLastSys.tagName=="LI"){
-								turn0=1;
-							}
-						}
-						var defNextSys=parent.children[def].nextElementSibling.querySelector(".sysCommand");
-						if(defNextSys){
-							if(parent.children[def].nextElementSibling==defNextSys.parentElement.parentElement.parentElement){
-								turn2=1;
-							}
-						}
-						var add=turn0*4;
+						var all=tempData['all'];
+						var def=tempData['def'];
+						var add=tempData['add'];
 						var line1_;
 						var line2_;
 						var line3_;
@@ -406,18 +446,11 @@ var Ecode = {
 							line1_.style.left=-18+"px";
 							var temp=0;
 							if(c+1==all.length){
-								if(def-all[c]==1){
-									parent.children[all[c]].style.marginBottom="20px";
-								}
 								temp=parent.children[def].offsetTop+4;
 							}
 							else{
-								if(all[c+1]-all[c]==1){
-									parent.children[all[c]].style.marginBottom="20px";
-								}
 								temp=parent.children[all[c+1]].offsetTop;
 							}
-
 							line1_.style.height=temp-parent.children[all[c]].offsetTop-10+"px";
 							line1_.querySelector(".triangle-right").style.display="block";
 							line1_.querySelector(".triangle-right").style.bottom="-5px";
@@ -439,7 +472,7 @@ var Ecode = {
 							else{
 								line2.querySelector(".triangle-down").style.display="block";
 							}
-							line2.style.height=parent.children[close].offsetTop-parent.children[all[0]].offsetTop+20-add+parent.children[close].offsetHeight-6+"px";
+							line2.style.height=parent.children[close].offsetTop-parent.children[all[0]].offsetTop+20-12+"px";
 							line2.style.top=parent.children[all[0]].offsetTop-10+"px";
 							line2.style.display="block";
 							if(turn2){
@@ -500,7 +533,7 @@ var Ecode = {
 		}
 		function drawn(origiArr){
 			var html="";
-			var mlk=0;
+			var endDivTag=0;
 			for(var b=0;b<origiArr.length;b++){
 				if(!isArray(origiArr[b])){
 					if(origiArr[b].type==".程序集"){
@@ -509,7 +542,6 @@ var Ecode = {
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 						html+=tablePara(4,origiArr[b].parameter);
 						lastPart=0;//程序集
-						mlk=1;
 					}
 					else if(origiArr[b].type==".程序集变量"){
 						if(lastPart!=0 && lastPart!=0.1){
@@ -518,28 +550,30 @@ var Ecode = {
 						}
 						if(lastPart!=0.1){
 							html+="<tr><th>变量名</th><th>类型</th><th>数组</th><th>备注</th></tr>";
-							lastPart=0.1;//程序集变量
 						}
+						for(var c=2;c<origiArr[b].parameter.length-1;c++){
+							origiArr[b].parameter[c]=origiArr[b].parameter[c+1];
+						}
+						origiArr[b].parameter.length--;
 						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
+
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
+						origiArr[b].parameter[2]=origiArr[b].parameter[2].replace(/"/g,"");
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
+
 						html+=tablePara(4,origiArr[b].parameter);
 						lastPart=0.1;//程序集变量
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type==".子程序"){
 						if(lastPart!=1){
 							if(lastPart<1 && lastPart>-1){
 								html+="</table>";
 							}
-							else if(lastPart<0){
-								html+="</div>";
-							}
 							else if(lastPart>1 && lastPart<=2){
 								html+="</table></div>";
 							}
 							html+="<div class='function'><table class='function_table'><tr><th>子程序名</th><th>返回值类型</th><th>公开</th><th colspan='3'>备注</th></tr>";
-							lastPart=1;//子程序
 						}
 						else{
 							html+="</table></div><div class='function'><table class='function_table'><tr><th>子程序名</th><th>返回值类型</th><th>公开</th><th colspan='3'>备注</th></tr>";
@@ -553,7 +587,7 @@ var Ecode = {
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
 						html+=tablePara(4,origiArr[b].parameter,3,3);
 						lastPart=1;//子程序
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type==".参数"){
 						if(lastPart==1){
@@ -599,14 +633,13 @@ var Ecode = {
 							html+=tablePara(4,origiArr[b].parameter);
 							lastPart=1.1;
 						}
-						mlk=1;
+						endDivTag=1;
 						//子程序参数 1.1 dll参数 3.1
 					}
 					else if(origiArr[b].type==".局部变量"){
 						if(lastPart!=2){
 							html+="</table>"
 							html+="<table class='variable_table'><tr><th>变量名</th><th>类型</th><th>静态</th><th>数组</th><th>备注</th></tr>";
-							lastPart=2;//局部变量
 						}
 						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
 						origiArr[b].parameter[2]=trim(origiArr[b].parameter[2]);
@@ -618,7 +651,7 @@ var Ecode = {
 						}
 						html+=tablePara(5,origiArr[b].parameter);
 						lastPart=2;//局部变量
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type==".DLL命令"){
 						if(lastPart!=3){
@@ -635,7 +668,7 @@ var Ecode = {
 						html+="<tr><th colspan='5'>在库中对应命令名：</th></tr>";
 						html+="<tr><td colspan='5'><span class='command'>"+origiArr[b].parameter[3].replace(/"/g,"")+"</span></td></tr>";
 						lastPart=3;//DLL
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type==".常量"){
 						if(lastPart!=4){
@@ -657,7 +690,7 @@ var Ecode = {
 						}
 						html+=tablePara(4,origiArr[b].parameter);
 						lastPart=4;//常量
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type==".数据类型"){
 						if(lastPart!=5){
@@ -672,7 +705,7 @@ var Ecode = {
 						}
 						html+=tablePara(3,origiArr[b].parameter,2,3);
 						lastPart=5;//数据类型
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type==".成员"){
 						if(lastPart==5){
@@ -687,7 +720,7 @@ var Ecode = {
 						}
 						html+=tablePara(5,origiArr[b].parameter);
 						lastPart=5.1;//数据类型成员
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type==".全局变量"){
 						if(lastPart!=6){
@@ -702,12 +735,11 @@ var Ecode = {
 						if(origiArr[b].parameter[3].indexOf("公开")>-1){
 							origiArr[b].parameter[3]="√";
 						}
-
 						origiArr[b].parameter[2]=origiArr[b].parameter[2].replace(/"/g,"");
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
 						html+=tablePara(5,origiArr[b].parameter);
 						lastPart=6;//全局变量
-						mlk=1;
+						endDivTag=1;
 					}
 					else if(origiArr[b].type.substr(0,1)=="."){
 						if(lastPart>=0){
@@ -766,7 +798,7 @@ var Ecode = {
 					html+=drawn(origiArr[b]);
 				}
 			}
-			if(mlk==1){
+			if(endDivTag==1){
 				html+="</div>";
 			}
 			return html;

@@ -31,6 +31,9 @@
 	display: block;
 	list-style: none;
 }
+.ecode .function{
+	margin-bottom: 10px;
+}
 .ecode table td,.ecode table th{
 	text-align: left;
 	border-right: 1px solid;
@@ -58,7 +61,6 @@
 }
 .ecode .show div:first-child{
 	margin-top: 10px;
-	margin-bottom: 0px;
 }
 .ecode .function_table{
 	margin-bottom: 4px;

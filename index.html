@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>易语言代码框Ecode3.5.3在线测试</title>
+	<title>易语言代码框Ecode3.5.4在线测试</title>
     <meta name="viewport" content="width=480, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <meta name="renderer" content="webkit">
-    <meta name="keywords" content="易语言代码框,Ecode3.5.3,张施荣,zhangshirong,Jarvis,Jarvis Zhang,开源,J.A.I.S">
-    <meta name="description" content="张施荣的开源项目,易语言代码框Ecode3.5.3在线测试" >
+    <meta name="keywords" content="易语言代码框,Ecode3.5.4,张施荣,zhangshirong,Jarvis,Jarvis Zhang,开源,J.A.I.S">
+    <meta name="description" content="张施荣的开源项目,易语言代码框Ecode3.5.4在线测试" >
     <meta name="author" Content="张施荣,zhangshirong,Jarvis">
     <link rel="stylesheet" type="text/css" href="ecode.css">
     <style>
@@ -43,11 +43,16 @@
     </style>
 </head>
 <body>
-<div id="head"><span style="font-size: 34px;line-height: 100px">Ecode 3.5.3</span> <span>在线演示
-</span><div style="right: 0px;bottom: 20px;position: absolute"><a href="./download/ecode3.5.3.zip">Ecode3.5.3下载</a><a href="https://github.com/imzhangshirong/Ecode" target="_blank">Github</a></div></div>
+<div id="head"><span style="font-size: 34px;line-height: 100px">Ecode 3.5.4</span> <span>在线演示
+</span><div style="right: 0px;bottom: 20px;position: absolute"><a href="./download/ecode3.5.4.zip">Ecode3.5.4下载</a><a
+        href="https://github.com/imzhangshirong/Ecode" target="_blank">Github</a></div></div>
 <div id="info">
     <p style="font-size: 16px;line-height: 40px;text-indent: 10px">更新说明 ></p>
     <div style="text-indent: 2em">
+        <p style="font-size: 16px;line-height: 20px;margin-top: 10px;margin-bottom: 10px">Verson 3.5.4</p>
+        <p>1、修复部分备注错乱</p>
+        <p>2、修复多个子程序不能完全显示</p>
+        <p>3、修复判断嵌套流程线错位</p>
         <p style="font-size: 16px;line-height: 20px;margin-top: 10px;margin-bottom: 10px">Verson 3.5.3</p>
         <p>1、修复DLL公开勾符号</p>
         <p>2、修复单个判断流程线js报错</p>
@@ -145,24 +150,33 @@ CloseHandle (hSnapShot)
                 .判断开始 ()
                 .判断 ()
                 .判断 ()
-                .默认
+                    .判断开始 ()
+                    .判断 ()
+                    .默认
+                    .判断结束
+                .判断 ()
                     .判断开始 ()
                     .默认
                     .判断结束
- .判断开始 ()
-                .判断 ()
                 .判断 ()
                 .默认
-                    .判断开始 ()
-                    .默认
-                    .判断结束
-
-                .判断结束
                 .判断结束
             .如果结束
         .如果结束
     .如果结束
 .如果结束
+
+.子程序 子程序1
+
+信息框 (“Hello World”, 0, , )
+
+.子程序 子程序2
+
+信息框 (“你好世界”, 0, , )
+
+.子程序 子程序3
+
+信息框 (“哎哟我去”, 0, , )
 </textarea>
             <a href="javascript:putin()" id="button">绘制代码</a>
         </div>
