@@ -62,6 +62,10 @@ var Ecode = {
 				if(eleEcode[a].getAttribute("status")!="trans"){
 					eleEcode[a].setAttribute("status","trans");
 					var origiData=eleEcode[a].innerHTML;
+					var origiData_copy=eleEcode[a].innerHTML;
+					//origiData=origiData.replace(/</g,"&lt;");
+					//origiData=origiData.replace(/>/g,"&gt;");
+					//console.log(eleEcode[a],origiData)
 					eleEcode[a].innerHTML="<p>Loading...</p>"
 					var lineCodes=origiData.split("\n");
 					var b;
@@ -138,8 +142,8 @@ var Ecode = {
 						html+="<div class='assembly'>";
 						html+=drawn(assembly[b]);
 					}
-					var allHTML="<div class='controller'><span class='desc'>"+eleEcode[a].getAttribute("desc")+"</span><a class='copy' href='javascript:' onclick='EcodeCopyCode(this)'>复制代码</a></div><div class='show'>"+html+"</div><div" +
-						" class='origiData'><textarea>"+origiData+"</textarea></div>";
+					var allHTML="<div class='controller'><span class='desc'>"+eleEcode[a].getAttribute("desc")+"</span><a class='copy' href='javascript:' onclick='EcodeCopyCode(this)'>复制代码</a></div><div class='show'>"+html+"</div></div><div" +
+						" class='origiData'><textarea>"+origiData_copy+"</textarea></div>";
 					eleEcode[a].innerHTML=allHTML;
 					var eleOrigiData=eleEcode[a].querySelector(".origiData");
 					eleEcode[a].style.height=eleEcode[a].clientHeight+"px";
@@ -830,7 +834,7 @@ var Ecode = {
 				add=0;
 				str=codeStr;
 				quote=findMatchStr("“","”",codeStr);
-				var compuStr="+-*/\\＝%<>≠=,＋";
+				var compuStr="＼＝％＜＞≠≥≤＋－×÷";
 				for(var a=0;a<remark;a++){
 					var p=a;
 					var temp=str.substr(p,1);
@@ -870,15 +874,15 @@ var Ecode = {
 					}
 					if(k==0){
 						var p=new Array();
-						p[p.length]=codeStr.indexOf("+",statics);
-						p[p.length]=codeStr.indexOf("-",statics);
-						p[p.length]=codeStr.indexOf("*",statics);
-						p[p.length]=codeStr.indexOf("/",statics);
-						p[p.length]=codeStr.indexOf("%",statics);
-						p[p.length]=codeStr.indexOf("=",statics);
-						p[p.length]=codeStr.indexOf("\\",statics);
-						p[p.length]=codeStr.indexOf(">",statics);
-						p[p.length]=codeStr.indexOf("<",statics);
+						p[p.length]=codeStr.indexOf("＋",statics);
+						p[p.length]=codeStr.indexOf("－",statics);
+						p[p.length]=codeStr.indexOf("×",statics);
+						p[p.length]=codeStr.indexOf("÷",statics);
+						p[p.length]=codeStr.indexOf("％",statics);
+						p[p.length]=codeStr.indexOf("＝",statics);
+						p[p.length]=codeStr.indexOf("＼",statics);
+						p[p.length]=codeStr.indexOf("＜",statics);
+						p[p.length]=codeStr.indexOf("＞",statics);
 						p[p.length]=codeStr.indexOf(".",statics);
 						p[p.length]=codeStr.indexOf(",",statics);
 						p[p.length]=codeStr.indexOf(" ",statics);
@@ -888,7 +892,8 @@ var Ecode = {
 						p[p.length]=codeStr.indexOf("]",statics);
 						p[p.length]=codeStr.indexOf("{",statics);
 						p[p.length]=codeStr.indexOf("}",statics);
-						p[p.length]=codeStr.indexOf("＝",statics);
+						p[p.length]=codeStr.indexOf("≥",statics);
+						p[p.length]=codeStr.indexOf("≤",statics);
 						p[p.length]=codeStr.indexOf("≠",statics);
 						var p1=codeStr.length;
 						for(var b=0;b< p.length;b++){
@@ -925,19 +930,21 @@ var Ecode = {
 						}
 					}
 					var p=new Array();
-					p[p.length]=codeStr.lastIndexOf("+",lastStart);
-					p[p.length]=codeStr.lastIndexOf("-",lastStart);
-					p[p.length]=codeStr.lastIndexOf("*",lastStart);
-					p[p.length]=codeStr.lastIndexOf("/",lastStart);
-					p[p.length]=codeStr.lastIndexOf("%",lastStart);
-					p[p.length]=codeStr.lastIndexOf("=",lastStart);
-					p[p.length]=codeStr.lastIndexOf("\\",lastStart);
-					p[p.length]=codeStr.lastIndexOf(">",lastStart);
-					p[p.length]=codeStr.lastIndexOf("<",lastStart);
+					p[p.length]=codeStr.lastIndexOf("＋",lastStart);
+					p[p.length]=codeStr.lastIndexOf("－",lastStart);
+					p[p.length]=codeStr.lastIndexOf("×",lastStart);
+					p[p.length]=codeStr.lastIndexOf("÷",lastStart);
+					p[p.length]=codeStr.lastIndexOf("％",lastStart);
+					p[p.length]=codeStr.lastIndexOf("＝",lastStart);
+					p[p.length]=codeStr.lastIndexOf("＼",lastStart);
+					p[p.length]=codeStr.lastIndexOf("＜",lastStart);
+					p[p.length]=codeStr.lastIndexOf("＞",lastStart);
 					p[p.length]=codeStr.lastIndexOf(".",lastStart);
 					p[p.length]=codeStr.lastIndexOf(",",lastStart);
 					p[p.length]=codeStr.lastIndexOf("＝",lastStart);
 					p[p.length]=codeStr.lastIndexOf("≠",lastStart);
+					p[p.length]=codeStr.lastIndexOf("≥",lastStart);
+					p[p.length]=codeStr.lastIndexOf("≤",lastStart);
 					p[p.length]=codeStr.lastIndexOf(" ",lastStart);
 					var p1=-1;
 					for(var b=0;b< p.length;b++){
