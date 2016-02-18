@@ -237,6 +237,7 @@ CloseHandle (hSnapShot)
 <script>
     var codes= Ecode.create();//创建
     function putin(){
+        document.getElementById('origi').innerHTML=document.getElementById('origi').value;
         EcodeSetCode(document.getElementById('test'),document.getElementById('origi').innerHTML);//设置代码
         codes.trans();//绘制
     }
