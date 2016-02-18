@@ -62,6 +62,9 @@ var Ecode = {
 				if(eleEcode[a].getAttribute("status")!="trans"){
 					eleEcode[a].setAttribute("status","trans");
 					var origiData=eleEcode[a].innerHTML;
+					var origiData_copy=eleEcode[a].innerHTML;
+					origiData=origiData.replace(/</g,"&lt;");
+					origiData=origiData.replace(/>/g,"&gt;");
 					eleEcode[a].innerHTML="<p>Loading...</p>"
 					var lineCodes=origiData.split("\n");
 					var b;
@@ -139,7 +142,7 @@ var Ecode = {
 						html+=drawn(assembly[b]);
 					}
 					var allHTML="<div class='controller'><span class='desc'>"+eleEcode[a].getAttribute("desc")+"</span><a class='copy' href='javascript:' onclick='EcodeCopyCode(this)'>复制代码</a></div><div class='show'>"+html+"</div></div><div" +
-						" class='origiData'><textarea>"+origiData+"</textarea></div>";
+						" class='origiData'><textarea>"+origiData_copy+"</textarea></div>";
 					eleEcode[a].innerHTML=allHTML;
 					var eleOrigiData=eleEcode[a].querySelector(".origiData");
 					eleEcode[a].style.height=eleEcode[a].clientHeight+"px";
