@@ -834,10 +834,11 @@ var Ecode = {
 				add=0;
 				str=codeStr;
 				quote=findMatchStr("“","”",codeStr);
-				var compuStr="＼＝％＜＞≠≥≤＋－×÷";
+				var compuStr="＼＝％＜＞≠≥≤＋－×÷,";
 				for(var a=0;a<remark;a++){
 					var p=a;
 					var temp=str.substr(p,1);
+
 					if(compuStr.indexOf(temp)>-1){
 						var k=inQuote(quote,p);
 						if(k==0){
@@ -885,7 +886,6 @@ var Ecode = {
 						p[p.length]=codeStr.indexOf("＞",statics);
 						p[p.length]=codeStr.indexOf(".",statics);
 						p[p.length]=codeStr.indexOf(",",statics);
-						p[p.length]=codeStr.indexOf(" ",statics);
 						p[p.length]=codeStr.indexOf("(",statics);
 						p[p.length]=codeStr.indexOf(")",statics);
 						p[p.length]=codeStr.indexOf("[",statics);
@@ -895,6 +895,10 @@ var Ecode = {
 						p[p.length]=codeStr.indexOf("≥",statics);
 						p[p.length]=codeStr.indexOf("≤",statics);
 						p[p.length]=codeStr.indexOf("≠",statics);
+						p[p.length]=codeStr.indexOf(" ",statics);
+						//html
+						p[p.length]=codeStr.indexOf("<",statics);
+						p[p.length]=codeStr.indexOf(">",statics);
 						var p1=codeStr.length;
 						for(var b=0;b< p.length;b++){
 							if(p[b]!=-1 && p[b]<p1){
