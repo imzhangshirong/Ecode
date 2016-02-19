@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                           Ecode 3.5.4                     *//
+//*                           Ecode 3.5.5                     *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 var Ecode = {
@@ -153,6 +153,7 @@ var Ecode = {
 					var eleEcodeJudge=eleEcode[a].querySelectorAll(".judge");
 					var eleEcodeIf=eleEcode[a].querySelectorAll(".if");
 					var eleEcodeUl=eleEcode[a].querySelectorAll("ul");
+					eleEcodeShow.style.width=window.screen.availWidth+"px";
 					//处理高度//////////////////////////////////////
 					for(var b=0;b<eleEcodeUl.length;b++){
 						var parent=eleEcodeUl[b];
@@ -305,7 +306,6 @@ var Ecode = {
 						}
 					}
 					//如果真//////////////////////////////////////
-					eleEcodeShow.style.width=window.screen.availWidth+"px";
 					for(var b=0;b<eleEcodeIfTrue.length;b++){
 						var parent=eleEcodeIfTrue[b].parentElement.parentElement;
 						if(parent.parentElement.previousElementSibling){
@@ -1027,7 +1027,7 @@ var Ecode = {
 							}
 							for(var d=0;d<sysCom2.length;d++){
 								if(temp_==sysCom2[d]){
-									temp_="<span class='logic'>"+temp_+"</span>";
+									temp_="</span><span class='logic'>"+temp_+"</span><span class='var'>";
 								}
 							}
 							rep_+=" "+temp_;
@@ -1039,7 +1039,7 @@ var Ecode = {
 							rep="<span class='var'>"+rep_+"</span>";
 						}
 						else{
-							rep_="";
+							rep="";
 						}
 						str=rep+str.substr(p_);
 						add+=rep.length-(p_);
@@ -1070,7 +1070,7 @@ var Ecode = {
 								}
 								for(var d=0;d<sysCom2.length;d++){
 									if(temp_==sysCom2[d]){
-										temp_="<span class='logic'>"+temp_+"</span>";
+										temp_="</span><span class='logic'>"+temp_+"</span><span class='var'>";
 									}
 								}
 								rep_+=" "+temp_;
