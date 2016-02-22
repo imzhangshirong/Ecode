@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                           Ecode 3.5.5                     *//
+//*                           Ecode 3.5.6                     *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 var Ecode = {
@@ -647,6 +647,7 @@ var Ecode = {
 						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
 						origiArr[b].parameter[2]=trim(origiArr[b].parameter[2]);
 						origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
+						console.log(origiArr[b].parameter)
 						origiArr[b].parameter[4]="<span class='remark'>"+origiArr[b].parameter[4].replace(/ /g,"&nbsp;")+"</span>";
 						origiArr[b].parameter[3]=origiArr[b].parameter[3].replace(/"/g,"");
 						if(origiArr[b].parameter[2].indexOf("静态")>-1){
@@ -1142,6 +1143,9 @@ var Ecode = {
 					arr[cols-1]+=","+arr[c];
 				}
 				arr.length=cols;
+			}
+			for(var c=arr.length;c<cols;c++){
+				arr[c]="";
 			}
 			return arr;
 		}
