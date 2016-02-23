@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                           Ecode 3.5.6                     *//
+//*                           Ecode 3.5.7                     *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 var Ecode = {
@@ -157,43 +157,50 @@ var Ecode = {
 					//处理高度//////////////////////////////////////
 					for(var b=0;b<eleEcodeUl.length;b++){
 						var parent=eleEcodeUl[b];
-						var def=0;
-						var close=parent.children.length-1;
-						var all=new Array();
-						for(var c=2;c<parent.children.length-1;c++){
-							var temp=parent.children[c].querySelector("p .judgeChild");
-							if(temp){
-								var par=temp.parentElement.parentElement.parentElement;
-								if(par==parent) {
-									all[all.length] = c;
+						if(parent.children[2].children[0].className.indexOf("cycle")==-1){
+							var def=0;
+							var close=parent.children.length-1;
+							var all=new Array();
+							for(var c=2;c<parent.children.length-1;c++){
+								var temp=parent.children[c].querySelector("p .judgeChild");
+								if(temp){
+									var par=temp.parentElement.parentElement.parentElement;
+									if(par==parent) {
+										all[all.length] = c;
+									}
+								}
+								var temp=parent.children[c].querySelector("p .def");
+								if(temp){
+									var par=temp.parentElement.parentElement.parentElement;
+									if(par==parent) {
+										def = c;
+									}
 								}
 							}
-							var temp=parent.children[c].querySelector("p .def");
-							if(temp){
-								var par=temp.parentElement.parentElement.parentElement;
-								if(par==parent) {
-									def = c;
+							if(def==3){
+								parent.children[2].style.marginBottom="20px";
+							}
+							if(def+1==close){
+								parent.children[def].style.marginBottom="20px";
+							}
+							if(parent.children[close-1].children[0].tagName=="UL" ){
+								if(parent.children[close-1].children[0].children[2] && parent.children[close-1].children[0].children[2].children[0].className.indexOf("cycle")==-1)parent.children[close].style.height="20px";
+							}
+							var parentNext;
+							if(parent.parentElement && parent.parentElement.nextElementSibling){
+								parentNext=parent.parentElement.nextElementSibling;
+							}
+							if(parent==parentNext)parentNext=null;
+							if(parentNext){
+								if(parentNext.querySelector(".def") && parentNext.children[0]==parentNext.querySelector(".def").parentElement){
+									parent.children[close].style.marginBottom="20px";
+								}
+								if(parentNext.querySelector(".judgeChild") && parentNext.children[0]==parentNext.querySelector(".judgeChild").parentElement){
+									parent.children[close].style.marginBottom="20px";
 								}
 							}
 						}
-						if(def==3){
-							parent.children[2].style.marginBottom="20px";
-						}
-						if(def+1==close){
-							parent.children[def].style.marginBottom="20px";
-						}
-						if(parent.children[close-1].children[0].tagName=="UL"){
-							parent.children[close].style.height="20px";
-						}
-						var nextParent;
-						if(parent.parentElement && parent.parentElement.nextElementSibling){
-							nextParent=parent.parentElement.nextElementSibling;
-						}
-						if(nextParent){
-							if(nextParent.querySelector(".def") && nextParent.children[0]==nextParent.querySelector(".def").parentElement){
-								parent.children[close].style.marginBottom="20px";
-							}
-						}
+
 					}
 					//循环//////////////////////////////////////
 					for(var b=0;b<eleEcodeCyc.length;b++){
@@ -201,14 +208,29 @@ var Ecode = {
 						var parentLast=parent.parentElement.previousElementSibling;
 						//var close=parentLast.children.length-1;
 						var turn0=0;
+
 						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[0] && parentLast.children[0].children[2]==parentLast.querySelector(".sysCommand").parentElement ){
 							turn0=1;
 						}
-
+						if(parentLast && parentLast.querySelector(".def") && parentLast.children[0] && parentLast.children[0].children[0]==parentLast.querySelector(".def")){
+							turn0=1;
+						}
+						var parentNext=parent.parentElement.nextElementSibling;
+						if(parentNext==parent){
+							parentNext=null;
+						}
+						var turn1=0;
+						if(parentNext && parentNext.querySelector(".def") && parentNext.children[0] && parentNext.children[0].children[0]==parentNext.querySelector(".def")){
+							turn1=1;
+						}
+						if(parentNext && parentNext.querySelector(".judgeChild") && parentNext.children[0] && parentNext.children[0].children[0]==parentNext.querySelector(".judgeChild")){
+							turn1=1;
+						}
 						var add=turn0*5;
+						var add_=turn1*5;
 						var line1=parent.children[0];
 						line1.style.top=10+add+"px";
-						line1.style.height=parent.clientHeight-20-add+"px";
+						line1.style.height=parent.clientHeight-20-add-add_+"px";
 						line1.querySelector(".triangle-right").style.top="-5px";
 						line1.querySelector(".triangle-right").style.display="block";
 					}
@@ -225,11 +247,12 @@ var Ecode = {
 						if(parent.parentElement.nextElementSibling){
 							parentNext=parent.parentElement.nextElementSibling.children[0];
 						}
-
+						if(parentNext==parent)parentNext=null;
 						var turn0=0;
 						var turn1=0;
 						var turn2=0;
-						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
+						var turn3=0;
+						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.querySelector(".sysCommand").className.indexOf("cycle")==-1 && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
 							turn0=1;
 						}
 						if(parentNext && parentNext.querySelector(".sysCommand") && parentNext.children[2] && parentNext.children[2] ==parentNext.querySelector(".sysCommand").parentElement){
@@ -261,9 +284,15 @@ var Ecode = {
 							}
 						}
 						var defNextSys=parent.children[def].nextElementSibling.querySelector(".sysCommand");
-						if(defNextSys){
+						var defPrevSys=parent.children[def].previousElementSibling.querySelector(".sysCommand");
+							if(defNextSys){
 							if(parent.children[def].nextElementSibling==defNextSys.parentElement.parentElement.parentElement){
 								turn2=1;
+							}
+						}
+						if(defPrevSys){
+							if(parent.children[def].previousElementSibling==defPrevSys.parentElement.parentElement.parentElement){
+								if(defPrevSys.className.indexOf("cycle")>-1)turn3=1;
 							}
 						}
 						var add=turn0*4;
@@ -274,6 +303,7 @@ var Ecode = {
 						tempData['turn0']=turn0;
 						tempData['turn1']=turn1;
 						tempData['turn2']=turn2;
+						tempData['turn3']=turn3;
 						tempData['def']=def;
 						tempData['add']=add;
 						tempData['all']=all;
@@ -305,8 +335,10 @@ var Ecode = {
 							parent.children[close].style.marginBottom = "20px";
 						}
 					}
-					//如果真//////////////////////////////////////
+					//如果真预处理//////////////////////////////////////
+					var ifTrueValueFixed=new Array();
 					for(var b=0;b<eleEcodeIfTrue.length;b++){
+						var tempData=new Object();
 						var parent=eleEcodeIfTrue[b].parentElement.parentElement;
 						if(parent.parentElement.previousElementSibling){
 							parentLast=parent.parentElement.previousElementSibling.children[0];
@@ -315,36 +347,24 @@ var Ecode = {
 						if(parent.parentElement.nextElementSibling){
 							parentNext=parent.parentElement.nextElementSibling.children[0];
 						}
+						if(parentNext==parent)parentNext=null;
 						var turn0=0;
 						var turn1=0;
-						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
+						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.querySelector(".sysCommand").className.indexOf("cycle")==-1 && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
 							turn0=1;
 						}
-						if(parentLast && parentLast.querySelector(".def")){
+						if(parentLast && parentLast.children[2] && parentLast.querySelector(".def") && parentLast.querySelector(".def").parentElement==parentLast.children[2]){
 							turn0=1;
 						}
 						if(parentNext && parentNext.querySelector(".sysCommand") && parentNext.children[2] && parentNext.children[2] ==parentNext.querySelector(".sysCommand").parentElement){
 							turn1=1;
 						}
-						var line1=parent.children[0];
-						var line2=parent.children[1];
-						var close=parent.children[parent.children.length-1];
 						var add=turn0*4;
-						if(turn1){
-							line1.style.top=10+add+"px";
-							line1.style.height=close.offsetTop-10+6-add+"px";
-							line1.querySelector(".triangle-right").style.bottom="-5px";
-							line1.querySelector(".triangle-right").style.display="block";
-						}
-						else{
-							line1.style.display="none";
-							line2.style.height=close.offsetTop-10-add+"px";
-							line2.style.top=10+add+"px";
-							line2.style.left="2px";
-							line2.style.width="15px";
-							line2.style.display="block";
-							line2.querySelector(".triangle-down").style.display="block";
-						}
+						tempData['parent']=parent;
+						tempData['turn0']=turn0;
+						tempData['turn1']=turn1;
+						tempData['add']=add;
+						ifTrueValueFixed[ifTrueValueFixed.length]=tempData;
 					}
 					//如果//////////////////////////////////////
 					for(var b=0;b<eleEcodeIf.length;b++){
@@ -357,10 +377,12 @@ var Ecode = {
 						if(parent.parentElement.nextElementSibling){
 							parentNext=parent.parentElement.nextElementSibling.children[0];
 						}
+						if(parentNext==parent)parentNext=null;
 						var turn0=0;
 						var turn1=0;
 						var turn2=0;
-						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
+						var turn3=0;
+						if(parentLast && parentLast.querySelector(".sysCommand") && parentLast.querySelector(".sysCommand").className.indexOf("cycle")==-1 && parentLast.children[2] && parentLast.children[2]==parentLast.querySelector(".sysCommand").parentElement ){
 							turn0=1;
 						}
 						if(parentNext && parentNext.querySelector(".sysCommand") && parentNext.children[2] && parentNext.children[2] ==parentNext.querySelector(".sysCommand").parentElement){
@@ -369,6 +391,7 @@ var Ecode = {
 						var line1=parent.children[0];
 						var line2=parent.children[1];
 						var line3=parent.children[0].children[2];
+						var line4=parent.children[1].children[2];
 						var close=parent.children.length-1;
 						var def;
 						for(var c=2;c<parent.children.length-1;c++){
@@ -387,9 +410,15 @@ var Ecode = {
 							}
 						}
 						var defNextSys=parent.children[def].nextElementSibling.querySelector(".sysCommand");
+						var defPrevSys=parent.children[def].previousElementSibling.querySelector(".sysCommand");
 						if(defNextSys){
 							if(parent.children[def].nextElementSibling==defNextSys.parentElement.parentElement.parentElement){
 								turn2=1;
+							}
+						}
+						if(defPrevSys){
+							if(parent.children[def].previousElementSibling==defPrevSys.parentElement.parentElement.parentElement){
+								if(defPrevSys.className.indexOf("cycle")>-1)turn3=1;
 							}
 						}
 						var add=turn0*4;
@@ -404,7 +433,7 @@ var Ecode = {
 							if(add==0){
 								add=6;
 							}
-							line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+20-add+parent.children[close].offsetHeight+"px";
+							line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+20+parent.children[close].offsetHeight+"px";
 							line2.style.top=parent.children[def].offsetTop-10+"px";
 							line2.style.display="block";
 						}
@@ -417,20 +446,29 @@ var Ecode = {
 						if(turn2){
 							line1.style.borderBottomWidth="0px";
 							line1.style.height=line1.clientHeight-6+"px";
-							line1.querySelector(".triangle-right").style.left="30px";
+							line1.querySelector(".triangle-right").style.left="32px";
 							line3.style.display="block";
 						}
+						if(turn3){
+							line2.style.borderTopWidth="0px";
+							line2.style.height=line2.clientHeight-8+"px";
+							line2.style.top=parent.children[def].offsetTop-10+4+"px";
+							line4.style.display="block";
+						}
+
 					}
 					//计算判断流程线//////////////////////////////////////////
-					for(var b=0;b<eleEcodeJudge.length;b++){
+					for(var b=0;b<judgeValueFixed.length;b++){
 						var tempData=judgeValueFixed[b];
 						var parent=tempData['parent'];
 						var turn0=tempData['turn0'];
 						var turn1=tempData['turn1'];
 						var turn2=tempData['turn2'];
+						var turn3=tempData['turn3'];
 						var line1=parent.children[0];
 						var line2=parent.children[1];
 						var line3=parent.children[0].children[2];
+						var line4=parent.children[1].children[2];
 						var close=parent.children.length-1;
 						var all=tempData['all'];
 						var def=tempData['def'];
@@ -446,10 +484,11 @@ var Ecode = {
 							line2_=parent.children[all[c]].children[0].children[0].children[1];
 							line3_=line1_.children[2];
 							line1_.style.top=10+4+"px";
-							line1_.style.left=-18+"px";
+							line1_.style.left=-20+"px";
 							var temp=0;
+
 							if(c+1==all.length){
-								temp=parent.children[def].offsetTop+4;
+								temp=parent.children[def].offsetTop;
 							}
 							else{
 								temp=parent.children[all[c+1]].offsetTop;
@@ -457,6 +496,20 @@ var Ecode = {
 							line1_.style.height=temp-parent.children[all[c]].offsetTop-10+"px";
 							line1_.querySelector(".triangle-right").style.display="block";
 							line1_.querySelector(".triangle-right").style.bottom="-5px";
+
+
+							var temp_e=parent.children[all[c]-1].children[0].children[2];
+							if(temp_e && temp_e.children[0] &&  temp_e.children[0].className.indexOf("cycle")>-1){
+								line2_.style.top=line1_.offsetHeight+2+"px";
+								line2_.style.width="30px";
+							}
+							else{
+								line2_.style.top=line1_.offsetHeight-2+"px";
+							}
+							line2_.style.left="-12px";
+							line2_.style.borderTopWidth="1px";
+							line2_.style.display="block";
+
 						}
 						line1.style.top=10+add+"px";
 						line1.style.height=parent.children[def].offsetTop-add+"px";
@@ -467,23 +520,29 @@ var Ecode = {
 							if(turn1){
 								line2.querySelector(".triangle-right").style.display="block";
 								line2.querySelector(".triangle-right").style.bottom="-5px";
+								line2.querySelector(".triangle-right").style.right="-1px";
 								line2.style.borderBottomWidth="1px";
-								if(add==0){
-									add=6;
-								}
+								line2.style.height=parent.children[close].offsetTop-parent.children[all[0]].offsetTop+20-6+"px";
 							}
 							else{
 								line2.querySelector(".triangle-down").style.display="block";
+								line2.style.height=parent.children[close].offsetTop-parent.children[all[0]].offsetTop+20-10-6+"px";
 							}
-							line2.style.height=parent.children[close].offsetTop-parent.children[all[0]].offsetTop+20-12+"px";
 							line2.style.top=parent.children[all[0]].offsetTop-10+"px";
 							line2.style.display="block";
 							if(turn2){
 								line1_.style.borderBottomWidth="0px";
 								line1_.style.height=line1_.offsetHeight-4+"px";
-								line1_.querySelector(".triangle-right").style.left="30px";
+								line1_.querySelector(".triangle-right").style.left="32px";
 								line3_.style.display="block";
 							}
+							if(turn3){
+								line2.style.borderTopWidth="0px";
+								line2.style.height=line2.clientHeight-2+"px";
+								line2.style.top=line2.offsetTop+4+"px";
+								line4.style.display="block";
+							}
+
 						}
 						else{
 							if(turn1){
@@ -493,6 +552,7 @@ var Ecode = {
 								if(add==0){
 									add=6;
 								}
+								line2.querySelector(".triangle-right").style.right="-1px";
 								line2.style.height=parent.children[close].offsetTop-parent.children[def].offsetTop+20-add+parent.children[close].offsetHeight+"px";
 
 							}
@@ -505,16 +565,47 @@ var Ecode = {
 							if(turn2){
 								line1.style.borderBottomWidth="0px";
 								line1.style.height=line1.clientHeight-6+"px";
-								line1.querySelector(".triangle-right").style.left="30px";
+								line1.querySelector(".triangle-right").style.left="34px";
 								line3.style.display="block";
 							}
+							if(turn3){
+								line2.style.borderTopWidth="0px";
+								line2.style.height=line2.clientHeight-6+"px";
+								line2.style.top=line2.offsetTop+6+"px";
+								line4.style.display="block";
+							}
+						}
 
+					}
+					//计算如果真流程线//////////////////////////////////////
+					for(var b=0;b<ifTrueValueFixed.length;b++){
+						var tempData=ifTrueValueFixed[b];
+						var parent=tempData['parent'];
+						var turn0=tempData['turn0'];
+						var turn1=tempData['turn1'];
+						var add=tempData['add'];
+						var line1=parent.children[0];
+						var line2=parent.children[1];
+						if(turn1){
+							line1.style.top=10+add+"px";
+							line1.style.height=parent.clientHeight-10+4-add+"px";
+							line1.querySelector(".triangle-right").style.bottom="-5px";
+							line1.querySelector(".triangle-right").style.display="block";
+						}
+						else{
+							line1.style.display="none";
+							line2.style.height=parent.children[parent.children.length-1].offsetTop+parent.children[parent.children.length-1].offsetHeight-10-add+"px";
+							line2.style.top=10+add+"px";
+							line2.style.left="2px";
+							line2.style.width="15px";
+							line2.style.display="block";
+							line2.querySelector(".triangle-down").style.display="block";
 						}
 					}
 					eleEcodeShow.style.height=eleEcodeShow.parentElement.clientHeight-40+"px";
 					var eleEcodeDiv=eleEcodeShow.querySelectorAll("div");
 					for(var b=0;b<eleEcodeDiv.length;b++){
-						eleEcodeDiv[b].style.width=eleEcodeDiv[b].clientWidth+30+"px";
+						eleEcodeDiv[b].style.width=eleEcodeDiv[b].clientWidth+32+"px";
 					}
 					eleEcodeShow.style.width="100%";
 				}
@@ -765,10 +856,10 @@ var Ecode = {
 						}
 						if(b==0){
 							if(lastPart<-1){
-								html+="<li><ul><o class='line1'><i class='triangle-right'></i><i class='triangle-down'></i><o class='line3'></o></o><o class='line2'><i class='triangle-down'></i><i class='triangle-right'></i></o>";
+								html+="<li><ul><o class='line1'><i class='triangle-right'></i><i class='triangle-down'></i><o class='line3'></o></o><o class='line2'><i class='triangle-down'></i><i class='triangle-right'></i><o class='line4'></o></o>";
 							}
 							else{
-								html+="<ul><o class='line1'><i class='triangle-right'></i><i class='triangle-down'></i><o class='line3'></o></o><o class='line2'><i class='triangle-down'></i><i class='triangle-right'></i></o>";
+								html+="<ul><o class='line1'><i class='triangle-right'></i><i class='triangle-down'></i><o class='line3'></o></o><o class='line2'><i class='triangle-down'></i><i class='triangle-right'></i><o class='line4'></o></o>";
 							}
 							lastPart--;
 							html+="<p>"+command+parseCodeLine(parameter,1)+"</p>";

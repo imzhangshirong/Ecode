@@ -1,3 +1,4 @@
+/*                           Ecode 3.5.7                      */
 *{
 	margin:0px auto;
 	padding: 0px auto;
@@ -72,7 +73,7 @@
 	margin-bottom: 8px;
 }
 .ecode ul{
-	padding-left: 20px;
+	padding-left: 22px;
 	position: relative;
 	float: left;
 }
@@ -139,6 +140,20 @@
 	border-top-width:0px;
 	border-right-width:0px;
 	border-bottom-width:1px;
+	display: none;
+	position: absolute;
+}
+.ecode .line4{
+	height: 100%;
+	width: 32px;
+	top: -1px;
+	left: -1px;
+	border-style: dashed;
+	border-color: #808080;
+	border-left-width:0px;
+	border-top-width:1px;
+	border-right-width:0px;
+	border-bottom-width:0px;
 	display: none;
 	position: absolute;
 }
