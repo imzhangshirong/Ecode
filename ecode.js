@@ -631,11 +631,20 @@ var Ecode = {
 			for(var b=0;b<origiArr.length;b++){
 				if(!isArray(origiArr[b])){
 					if(origiArr[b].type==".程序集"){
-						html+="<table class='assembly_table'><tr><th>程序集名</th><th>保留</th><th>保留</th><th>备注</th></tr>";
 						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[3]="<span class='remark'>"+origiArr[b].parameter[3].replace(/ /g,"&nbsp;")+"</span>";
+						if(trim(origiArr[b].parameter[1])=="" && trim(origiArr[b].parameter[2])==""){
+							html+="<table class='assembly_table'><tr><th>程序集名</th><th>保留</th><th>保留</th><th>备注</th></tr>";
+						}
+						else{
+							html+="<table class='assembly_table'><tr><th>类名</th><th>基类</th><th>公开</th><th>备注</th></tr>";
+							origiArr[b].parameter[1]="<span class='dataType'>"+origiArr[b].parameter[1]+"</span>";
+							if(origiArr[b].parameter[2].indexOf("公开")>-1){
+								origiArr[b].parameter[2]="√";
+							}
+						}
 						html+=tablePara(4,origiArr[b].parameter);
-						lastPart=0;//程序集
+						lastPart=0;//程序集or类
 					}
 					else if(origiArr[b].type==".程序集变量"){
 						if(lastPart!=0 && lastPart!=0.1){
