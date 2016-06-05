@@ -2,6 +2,7 @@
 //*                           Ecode 3.5.8                     *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
+
 var Ecode = {
 	create: function() {
 		var ecode={};
@@ -907,6 +908,9 @@ var Ecode = {
 			return html;
 		}
 		function parseCodeLine(origiCodeStr,type){
+			
+			
+			
 			var codeStr=origiCodeStr;
 			var str=codeStr;
 			var add=0;
@@ -1015,10 +1019,9 @@ var Ecode = {
 				str=codeStr;
 			}
 			//高亮命令/////////////////////////////////
-			var quote=findMatchStr("“","”",codeStr);
-			var bracket0=findMatchStr("(",")",codeStr);
+			var bracket0=findMatchStr("(",")",codeStr,true);
 			for(var a=0;a<bracket0.length;a++){
-				var k=(inQuote(quote,bracket0[a][0]) && inQuote(quote,bracket0[a][1]));
+				var k=0;
 				if(type && bracket0[a][0]>remark){
 					k=1;
 				}
@@ -1070,7 +1073,7 @@ var Ecode = {
 						var rep="<span class='sysCommand'>"+trim(command)+"</span>";
 					}
 					str=str.substr(0,add+p1+1)+rep+str.substr(add+bracket0[a][0],1)+son+codeStr.substr(bracket0[a][1]);
-					var len=rep.length-command.length+son.length-(bracket0[a][1]-bracket0[a][0])+1
+					var len=rep.length-command.length+son.length-(bracket0[a][1]-bracket0[a][0])+1;
 					add+=len;
 					remark+=len;
 				}
@@ -1081,24 +1084,52 @@ var Ecode = {
 				codeStr=str;
 				quote=findMatchStr("“","”",codeStr);
 				var compuStr="(){}[]";
+				var last=[-1,-1,-1];
 				for(var a=0;a<=remark;a++){
 					var p=a;
 					var temp=str.substr(p,1);
 					if(compuStr.indexOf(temp)>-1){
 						var k=inQuote(quote,p);
 						if(k==0){
+							var replace=0;
 							if(temp=="(" || temp==")"){
 								temp="<span class='bracket0'>"+temp;
 							}
 							else if(temp=="[" || temp=="]"){
-								temp="<span class='bracket1'>"+temp;
+								var temp_=temp;
+								if(temp=="]" && last[2]>-1){
+									var strDate=codeStr.substr(last[2],a+add-last[2]);
+									if(strDate.match(/^[\d]{4}年([\d]?[\d]{1}月)?([\d]?[\d]{1}日)?([\d]?[\d]{1}时)?([\d]?[\d]{1}分)?([\d]?[\d]{1}秒)?$/g)){
+										
+										temp="<span class='datetime'>"+strDate+"</span><span class='bracket1'>"+temp;
+										replace=1;
+									}
+									last[2]=-1;
+								}
+								
+								if(replace==0){
+									temp="<span class='bracket1'>"+temp;
+								}
+								if(temp_=="["){
+									last[2]=a;
+								}
 							}
 							else if(temp=="{" || temp=="}"){
 								temp="<span class='bracket2'>"+temp;
 							}
+							
 							temp+="</span>";
-							codeStr=codeStr.substr(0,add+p)+temp+codeStr.substr(add+p+1);
-							add+=temp.length-1;
+							if(last[2]>-1){
+								last[2]+=add+temp.length;
+							}
+							if(replace==1){
+								codeStr=codeStr.substr(0,add+p-strDate.length)+temp+codeStr.substr(add+p+1);
+								add+=temp.length-1-strDate.length;
+							}
+							else{
+								codeStr=codeStr.substr(0,add+p)+temp+codeStr.substr(add+p+1);
+								add+=temp.length-1;
+							}
 						}
 					}
 				}
@@ -1300,18 +1331,36 @@ var Ecode = {
 			}
 			return temp0;
 		}
-		function findMatchStr(startStr,endStr,origiStr){
+		function findMatchStr(startStr,endStr,origiStr,quote){
 			var temp0=new Array();
+			var temp1=new Array();
 			var half=new Array();
 			var end=-1;
 			var start=origiStr.indexOf(startStr);
+			if(quote){
+				var p_quote=findMatchStr("“","”",origiStr);
+			}
 			while(start>-1){
+				var k=[0,0];
 				end=origiStr.indexOf(endStr,start+1);
+				if(p_quote){
+					for(var a=0;a<p_quote.length;a++){
+						if(start<p_quote[a][1] && start>p_quote[a][0]){
+							k[0]=1;
+							start=origiStr.indexOf(startStr,start+1);
+							end=origiStr.indexOf(endStr,start+1);
+						}
+						if(end<p_quote[a][1] && end>p_quote[a][0]){
+							k[1]=1;
+							end=origiStr.indexOf(endStr,end+1);
+						}
+					}
+				}
 				var p=origiStr.indexOf(startStr,start+1);
 				if(p==-1){
 					p=origiStr.length;
 				}
-				var temp1;
+				temp1=new Array();
 				if(p>end){
 					temp1=[start,end];
 					var pp=half.length-1;
@@ -1322,6 +1371,7 @@ var Ecode = {
 							half.length--;
 						}
 						else{
+							
 							break;
 						}
 					}
@@ -1331,8 +1381,16 @@ var Ecode = {
 					half[half.length]=temp0.length;
 				}
 				temp0[temp0.length]=temp1;
-				start=origiStr.indexOf(startStr,start+1);
-
+				if(k[1]==1){
+					start=origiStr.indexOf(startStr,end+1);
+				}
+				else{
+					start=origiStr.indexOf(startStr,start+1);
+				}
+			}
+			if(temp1[1]==-1 && origiStr.indexOf(startStr,temp1[0]+1)>-1){
+				temp1[1]=origiStr.indexOf(startStr,temp1[0]+1);
+				temp0[temp0.length]=temp1;
 			}
 			var tempRe=new Array();
 			var last=-1;

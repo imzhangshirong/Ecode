@@ -41,7 +41,6 @@
 	border-bottom: 1px solid;
 	padding: 2px 3px;
 	border-color: #888888;
-
 }
 .ecode table td{
 	background-color: #fff;
@@ -221,6 +220,10 @@
 	padding: 0px 2px;
 }
 .ecode .operator{
+	color:#000080;
+	padding: 0px 2px;
+}
+.ecode .datetime{
 	color:#000080;
 	padding: 0px 2px;
 }
