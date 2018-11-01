@@ -1,5 +1,5 @@
 //-------------------------------------------------------------//
-//*                           Ecode 3.5.9                     *//
+//*                           Ecode 3.5.10                    *//
 //*                Created by zhangshirong Jarvis             *//
 //-------------------------------------------------------------//
 
@@ -118,7 +118,6 @@ var Ecode = {
 							temp[temp.length]=lineCodesR[c];
 						}
 						var limit1=findMatchArr(".子程序","",temp);
-						//console.log(limit1);
 						if(limit1.length>0){
 							var program=new Array();
 							for(var c=limit[b][0];c<limit1[0][0];c++){
@@ -142,6 +141,7 @@ var Ecode = {
 						html+="<div class='assembly'>";
 						html+=drawn(assembly[b]);
 					}
+
 					var allHTML="<div class='controller'><span class='desc'>"+eleEcode[a].getAttribute("desc")+"</span><a class='copy' href='javascript:' onclick='EcodeCopyCode(this)'>复制代码</a></div><div class='show'>"+html+"</div></div><div" +
 						" class='origiData'><textarea>"+origiData_copy+"</textarea></div>";
 					eleEcode[a].innerHTML=allHTML;
@@ -700,7 +700,7 @@ var Ecode = {
 						else if(lastPart==3){
 							html+="<tr><th>参数名</th><th>类型</th><th>传址</th><th>数组</th><th>备注</th></tr>";
 						}
-						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
+						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
 						origiArr[b].parameter[2]=trim(origiArr[b].parameter[2]);
 						if(lastPart>=3 && lastPart<4){
 							var temp="";
@@ -759,7 +759,8 @@ var Ecode = {
 					}
 					else if(origiArr[b].type==".DLL命令"){
 						if(lastPart!=3){
-							html+="</table></div>";
+							if(lastPart>-1)html+="</table>";
+							html+="</div>";
 						}
 						html+="<div class='dllFunction'><table class='dllFunction_table'><tr><th>Dll命令名</th><th>返回值类型</th><th>公开</th><th colspan='2'>备注</th></tr>";
 						origiArr[b].parameter=dealTablePara(6,origiArr[b].parameter);
@@ -776,7 +777,8 @@ var Ecode = {
 					}
 					else if(origiArr[b].type==".常量"){
 						if(lastPart!=4){
-							html+="</table></div>";
+							if(lastPart>-1)html+="</table>";
+							html+="</div>";
 							html+="<div class='statics'><table class='statics_table'><tr><th>常量名称</th><th>常量值</th><th>公开</th><th>备注</th></tr>";
 						}
 						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
@@ -798,7 +800,8 @@ var Ecode = {
 					}
 					else if(origiArr[b].type==".数据类型"){
 						if(lastPart!=5){
-							html+="</table></div>";
+							if(lastPart>-1)html+="</table>";
+							html+="</div>";
 							html+="<div class='selfDataType'><table class='selfDataType_table'><tr><th>数据类型名</th><th>公开</th><th colspan='3'>备注</th></tr>";
 						}
 						origiArr[b].parameter=dealTablePara(4,origiArr[b].parameter);
@@ -828,7 +831,8 @@ var Ecode = {
 					}
 					else if(origiArr[b].type==".全局变量"){
 						if(lastPart!=6){
-							html+="</table></div>";
+							if(lastPart>-1)html+="</table>";
+							html+="</div>";
 							html+="<div class='globalVariable'><table class='globalVariable_table'><tr><th>全局变量名</th><th>全类型</th><th>数组</th><th>公开</th><th>备注</th></tr>";
 						}
 						origiArr[b].parameter=dealTablePara(5,origiArr[b].parameter);
@@ -903,15 +907,14 @@ var Ecode = {
 				}
 			}
 			if(endDivTag==1){
+				if((lastPart >= 3 && lastPart < 4) || (lastPart >= 4 && lastPart < 5) || (lastPart >= 5 && lastPart < 6) || (lastPart >= 6))html+="</table>";
 				html+="</div>";
 			}
 			return html;
 		}
 		function parseCodeLine(origiCodeStr,type){
-			
-			
-			
-			var codeStr=origiCodeStr;
+			var codeStr=trimEnd(origiCodeStr);
+			if(codeStr=="")return "";
 			var str=codeStr;
 			var add=0;
 			//var addRemark=0;
@@ -1451,6 +1454,9 @@ var Ecode = {
 		}
 		function trim(str){ //删首尾空
 			return str.replace(/(^\s*)|(\s*$)/g, "");
+		}
+		function trimEnd(str){ //删尾空
+			return str.replace(/(\s*$)/g, "");
 		}
 		return ecode;
 	}
